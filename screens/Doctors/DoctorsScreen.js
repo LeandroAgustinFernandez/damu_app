@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import {
   View,
+  SafeAreaView,
   Text,
   FlatList,
   TouchableOpacity,
@@ -63,7 +64,7 @@ const DoctorsScreen = ({ navigation }) => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title="Médicos" onClose={() => navigation.goBack()} />
       {loading ? (
         <Text style={styles.loading}>Cargando médicos...</Text>
@@ -129,7 +130,7 @@ const DoctorsScreen = ({ navigation }) => {
           </View>
         </Modal>
       )}
-    </View>
+    </SafeAreaView>
   );
 };
 

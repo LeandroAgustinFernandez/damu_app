@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   View,
+  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -65,7 +66,7 @@ export default function SignUpScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
+    <View>
       <View style={styles.header}>
         <Text style={styles.logo}>DAMU</Text>
         <Text style={styles.subtitle}>Registro</Text>
@@ -174,6 +175,6 @@ const styles = StyleSheet.create({
   },
   footerText: {
     textAlign: 'center',
-    fontSize: 16
+    fontSize: 16,
   }
 });

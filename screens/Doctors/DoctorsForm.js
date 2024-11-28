@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   ScrollView,
+  SafeAreaView,
   Platform
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
@@ -71,7 +72,7 @@ const DoctorsForm = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Header title="Nuevo Médico" onClose={() => navigation.goBack()} />
       <ScrollView contentContainerStyle={styles.form}>
         <Text style={styles.sectionTitle}>Datos:</Text>
@@ -162,7 +163,7 @@ const DoctorsForm = ({ navigation }) => {
           <Text style={styles.saveButtonText}>Guardar</Text>
         </TouchableOpacity>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 

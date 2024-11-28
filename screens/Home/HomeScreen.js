@@ -32,7 +32,6 @@ const HomeScreen = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <Text style={styles.headerText}>DAMU</Text>
         <Text style={styles.subHeader}>Accesos directos</Text>
