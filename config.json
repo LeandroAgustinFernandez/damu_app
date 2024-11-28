@@ -7,17 +7,6 @@
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
-    "extra": {
-      "EXPO_PUBLIC_CLERK_API_KEY":"pk_test_cGlja2VkLWNoaWNrZW4tNDIuY2xlcmsuYWNjb3VudHMuZGV2JA",
-      "DATABASE_URL":"postgresql://damudb_owner:oUFCipfksz34@ep-proud-rice-a5z8wih2.us-east-2.aws.neon.tech/damudb?sslmode=require",
-      "EXPO_PUBLIC_SERVER_URL":"https://damu.com/",
-      "FIREBASE_API_KEY":"",
-      "FIREBASE_AUTHDOMAIN":"",
-      "FIREBASE_PROYECTID":"",
-      "FIREBASE_STORAGEBUCKET":"",
-      "FIREBASE_MESSAGINGSENDERID":"",
-      "FIREBASE_APPID":""
-    },
     "splash": {
       "image": "./assets/splash-icon.png",
       "resizeMode": "contain",

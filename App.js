@@ -1,20 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { ClerkProvider } from '@clerk/clerk-expo';
+import Constants from 'expo-constants';
+import { NavigationContainer } from '@react-navigation/native';
+import { UserProvider } from './context/UserContext';
+import MainNavigator from './navigation/MainNavigator';
 
 export default function App() {
+  const clerckFrontendApi = Constants.expoConfig.extra.EXPO_PUBLIC_CLERK_API_KEY;
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <ClerkProvider publishableKey={clerckFrontendApi}>
+      <UserProvider>
+        <NavigationContainer>
+          <MainNavigator />
+        </NavigationContainer>
+      </UserProvider>
+    </ClerkProvider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
