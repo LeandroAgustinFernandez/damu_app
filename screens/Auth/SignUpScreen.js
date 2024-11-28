@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,15 +6,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   Alert,
-} from "react-native";
-import { useSignUp } from "@clerk/clerk-expo";
+} from 'react-native';
+import { useSignUp } from '@clerk/clerk-expo';
 
 export default function SignUpScreen({ navigation }) {
   const { signUp, isLoaded } = useSignUp();
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
   const isValidPassword = (password) => {
     return (
@@ -32,19 +32,19 @@ export default function SignUpScreen({ navigation }) {
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      Alert.alert("Error", "El correo electrónico no es válido");
+      Alert.alert('Error', 'El correo electrónico no es válido');
       return;
     }
 
     if (password !== confirmPassword) {
-      Alert.alert("Error", "Las contraseñas no coinciden");
+      Alert.alert('Error', 'Las contraseñas no coinciden');
       return;
     }
 
     if (!isValidPassword(password)) {
       Alert.alert(
-        "Error",
-        "La contraseña no es válida. Debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial."
+        'Error',
+        'La contraseña no es válida. Debe tener al menos 8 caracteres, una letra mayúscula, un número y un carácter especial.'
       );
       return;
     }
@@ -54,78 +54,77 @@ export default function SignUpScreen({ navigation }) {
         emailAddress: email,
         password: password,
       });
-      let user_email_verification =
-        await signUp.prepareEmailAddressVerification();
-      navigation.navigate("Verification", { email: email, name: name });
+      let user_email_verification = await signUp.prepareEmailAddressVerification();
+      navigation.navigate('Verification', { email: email, name: name });
     } catch (err) {
       Alert.alert(
-        "Error de registro",
-        err.errors[0]?.message || "Ocurrió un error"
+        'Error de registro',
+        err.errors[0]?.message || 'Ocurrió un error'
       );
     }
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.logo}>DAMU</Text>
         <Text style={styles.subtitle}>Registro</Text>
       </View>
-      <View style={styles.container}>
-        <TextInput
-          style={styles.input}
-          placeholder="Email"
-          placeholderTextColor="#777"
-          keyboardType="email-address"
-          autoCapitalize="none"
-          value={email}
-          onChangeText={setEmail}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Contraseña"
-          placeholderTextColor="#777"
-          secureTextEntry
-          value={password}
-          onChangeText={setPassword}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Repetir contraseña"
-          placeholderTextColor="#777"
-          secureTextEntry
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-        />
 
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Registrarse</Text>
-        </TouchableOpacity>
+      <TextInput
+        style={styles.input}
+        placeholder="Email"
+        placeholderTextColor="#777"
+        keyboardType="email-address"
+        autoCapitalize="none"
+        value={email}
+        onChangeText={setEmail}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Contraseña"
+        placeholderTextColor="#777"
+        secureTextEntry
+        value={password}
+        onChangeText={setPassword}
+      />
+      <TextInput
+        style={styles.input}
+        placeholder="Repetir contraseña"
+        placeholderTextColor="#777"
+        secureTextEntry
+        value={confirmPassword}
+        onChangeText={setConfirmPassword}
+      />
 
-        <TouchableOpacity onPress={() => navigation.navigate("SignIn")}>
-          <Text style={styles.footerText}>
-            Ya es miembro? <Text style={styles.loginText}>Iniciar sesión</Text>
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+        <Text style={styles.buttonText}>Registrarse</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+        <Text style={styles.footerText}>
+          Ya es miembro?{' '}
+          <Text style={styles.loginText}>Iniciar sesión</Text>
+        </Text>
+      </TouchableOpacity>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   header: {
-    backgroundColor: "#F57C00",
+    backgroundColor: '#F57C00',
     height: 200,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     marginBottom: 20,
   },
   logo: {
     fontSize: 36,
-    color: "#4A369D",
-    fontWeight: "bold",
+    color: '#4A369D',
+    fontWeight: 'bold',
   },
   container: {
     flex: 1,
@@ -174,7 +173,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold', // "Iniciar sesión" en negrita
   },
   footerText: {
-    fontSize: 16,
     textAlign: 'center',
+    fontSize: 16
   }
 });
