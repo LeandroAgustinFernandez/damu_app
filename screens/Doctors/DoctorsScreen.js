@@ -10,38 +10,43 @@ import {
   Modal,
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
-// import DoctorsForm from './DoctorsForm';
-import { getDoctorsByUserId } from "../../services/api";
+import { getDoctorsByUserId, deleteDoctor } from "../../services/api";
 import { MaterialIcons } from "@expo/vector-icons";
 import Header from "../../components/Header";
-
-const { width } = Dimensions.get("window"); // Ancho de la pantalla
 
 const DoctorsScreen = ({ navigation }) => {
   const [doctors, setDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
+  const [deleteModal, setdeleteModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
-    const fetchDoctors = async () => {
-      try {
-        const userDoctors = await getDoctorsByUserId(user.user_id);
-        setDoctors(userDoctors);
-      } catch (error) {
-        console.error("Error fetching doctors:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    // if (user && !showForm) {
     if (user) {
       fetchDoctors();
     }
-    // }, [user, showForm]);
   }, [user]);
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener("focus", () => {
+      fetchDoctors();
+    });
+
+    return unsubscribe;
+  }, [navigation]);
+
+  const fetchDoctors = async () => {
+    try {
+      setLoading(true); // Opcional: mostrar carga al refrescar
+      const userDoctors = await getDoctorsByUserId(user.user_id);
+      setDoctors(userDoctors);
+    } catch (error) {
+      console.error("Error fetching doctors:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const openModal = (doctor) => {
     setSelectedDoctor(doctor);
@@ -52,6 +57,32 @@ const DoctorsScreen = ({ navigation }) => {
     setModalVisible(false);
     setSelectedDoctor(null);
   };
+
+  const openDeleteModal = (doctor) => {
+    setSelectedDoctor(doctor);
+    setdeleteModal(true);
+  };
+
+  const closeDeleteModal = () => {
+    setdeleteModal(false);
+  };
+
+  const handleDeleteDoctor = async () => {
+    try {
+      await deleteDoctor(selectedDoctor.id);
+      setDoctors(doctors.filter((doctor) => doctor.id !== selectedDoctor.id));
+      setdeleteModal(false);
+      closeModal();
+    } catch (error) {
+      console.error("Error deleting doctor:", error);
+    }
+  };
+
+  const handleEditDoctor = () => {
+    closeModal();
+    navigation.navigate("DoctorsForm", { doctor: selectedDoctor });
+  };
+
   const renderDoctor = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => openModal(item)}>
       <View style={styles.cardContent}>
@@ -84,7 +115,7 @@ const DoctorsScreen = ({ navigation }) => {
       >
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
-      {/* Modal de información del doctor */}
+
       {selectedDoctor && (
         <Modal
           transparent={true}
@@ -92,42 +123,83 @@ const DoctorsScreen = ({ navigation }) => {
           visible={modalVisible}
           onRequestClose={closeModal}
         >
-          <View style={styles.modalContainer}>
-            <View style={styles.modalContent}>
-              <TouchableOpacity onPress={closeModal} style={styles.closeButton}>
-                <MaterialIcons name="close" size={24} color="#ff7f00" />
-              </TouchableOpacity>
-              <MaterialIcons name="person" size={48} color="#ff7f00" />
-              <Text style={styles.modalName}>
-                {selectedDoctor.name} {selectedDoctor.surname}
-              </Text>
-              <Text style={styles.modalSpeciality}>
-                {selectedDoctor.speciality}
-              </Text>
-              <Text style={styles.modalText}>
-                Dirección: {selectedDoctor.address}
-              </Text>
-              <Text style={styles.modalText}>
-                Días de atención: {selectedDoctor.attention_days}
-              </Text>
-              <Text style={styles.modalText}>
-                Horario: {selectedDoctor.schedule}
-              </Text>
-              <Text style={styles.modalText}>
-                Teléfono: {selectedDoctor.phone}
-              </Text>
-              <Text style={styles.modalText}>
-                Secretaria: {selectedDoctor.secretary}
-              </Text>
-              {/* Botones de Editar y Eliminar */}
-              <TouchableOpacity style={styles.editButton}>
-                <Text style={styles.editButtonText}>Editar</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.deleteButton}>
-                <Text style={styles.deleteButtonText}>Eliminar</Text>
-              </TouchableOpacity>
+          {deleteModal ? (
+            <View style={styles.modalContainer}>
+              <View style={styles.deleteModalContent}>
+                <TouchableOpacity
+                  onPress={closeDeleteModal}
+                  style={styles.closeButton}
+                >
+                  <MaterialIcons name="close" size={24} color="#ff7f00" />
+                </TouchableOpacity>
+                <MaterialIcons name="person" size={48} color="#ff7f00" />
+                <Text style={styles.modalName}>
+                  {selectedDoctor.name} {selectedDoctor.surname}
+                </Text>
+                <Text style={styles.modalSpeciality}>
+                  {selectedDoctor.speciality}
+                </Text>
+                <Text style={styles.deleteWarningText}>
+                  ¿Desea eliminar este médico?
+                </Text>
+                <TouchableOpacity
+                  style={styles.deleteConfirmButton}
+                  onPress={handleDeleteDoctor}
+                >
+                  <Text style={styles.deleteConfirmButtonText}>Eliminar</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.cancelButton}
+                  onPress={closeDeleteModal}
+                >
+                  <Text style={styles.cancelButtonText}>Cancelar</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </View>
+          ) : (
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity
+                  onPress={closeModal}
+                  style={styles.closeButton}
+                >
+                  <MaterialIcons name="close" size={24} color="#ff7f00" />
+                </TouchableOpacity>
+                <MaterialIcons name="person" size={48} color="#ff7f00" />
+                <Text style={styles.modalName}>
+                  {selectedDoctor.name} {selectedDoctor.surname}
+                </Text>
+                <Text style={styles.modalSpeciality}>
+                  {selectedDoctor.speciality}
+                </Text>
+                <Text style={styles.modalText}>
+                  Dirección: {selectedDoctor.address}
+                </Text>
+                <Text style={styles.modalText}>
+                  Días de atención: {selectedDoctor.attention_day.join(", ")}
+                </Text>
+                <Text style={styles.modalText}>
+                  Horario: {selectedDoctor.schedule}
+                </Text>
+                <Text style={styles.modalText}>
+                  Teléfono: {selectedDoctor.phone}
+                </Text>
+                <TouchableOpacity
+                  style={styles.editButton}
+                  onPress={handleEditDoctor}
+                >
+                  <Text style={styles.editButtonText}>Editar</Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                  style={styles.deleteButton}
+                  onPress={() => openDeleteModal(selectedDoctor)} // Llama al modal de eliminación
+                >
+                  <Text style={styles.deleteButtonText}>Eliminar</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
         </Modal>
       )}
     </SafeAreaView>
@@ -194,6 +266,7 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
+    minHeight: 500,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -247,6 +320,51 @@ const styles = StyleSheet.create({
   },
   deleteButtonText: {
     color: "#ff7f00",
+    fontSize: 18,
+  },
+  deleteModalContent: {
+    width: "80%",
+    backgroundColor: "#fff",
+    padding: 20,
+    borderRadius: 10,
+    alignItems: "center",
+    elevation: 10,
+  },
+  deleteIconOverlay: {
+    position: "absolute",
+    top: 20,
+    right: 20,
+    backgroundColor: "#ff0000",
+    borderRadius: 50,
+    padding: 5,
+  },
+  deleteWarningText: {
+    fontSize: 18,
+    color: "#333",
+    textAlign: "center",
+    marginVertical: 20,
+  },
+  deleteConfirmButton: {
+    backgroundColor: "#ff0000",
+    padding: 12,
+    borderRadius: 5,
+    width: "80%",
+    alignItems: "center",
+    marginVertical: 10,
+  },
+  deleteConfirmButtonText: {
+    color: "#fff",
+    fontSize: 18,
+  },
+  cancelButton: {
+    backgroundColor: "#ccc",
+    padding: 12,
+    borderRadius: 5,
+    width: "80%",
+    alignItems: "center",
+  },
+  cancelButtonText: {
+    color: "#333",
     fontSize: 18,
   },
 });

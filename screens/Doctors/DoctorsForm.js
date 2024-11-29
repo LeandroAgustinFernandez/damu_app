@@ -7,13 +7,14 @@ import {
   StyleSheet,
   ScrollView,
   SafeAreaView,
-  Platform
+  Platform,
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
 import { getSpecialties, saveDoctor } from "../../services/api";
 import { MultiSelect } from "react-native-element-dropdown";
 import { Picker } from "@react-native-picker/picker";
 import Header from "../../components/Header";
+import { updateDoctor } from "../../services/api";
 
 const daysOfWeek = [
   { label: "Lunes", value: "Lunes" },
@@ -25,17 +26,18 @@ const daysOfWeek = [
   { label: "Domingo", value: "Domingo" },
 ];
 
-const DoctorsForm = ({ navigation }) => {
+const DoctorsForm = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
+  const { doctor } = route.params || {};
   const [formData, setFormData] = useState({
-    name: "",
-    surname: "",
-    speciality: "",
-    address: "",
-    attention_days: [],
-    schedule: "",
-    phone: "",
-    additional_info: "",
+    name: doctor?.name || "",
+    surname: doctor?.surname || "",
+    phone: doctor?.phone || "",
+    address: doctor?.address || "",
+    speciality_id: doctor?.speciality_id || "",
+    attention_days: doctor?.attention_day || [],
+    schedule: doctor?.schedule || "",
+    additional_info: doctor?.additional_info || "",
   });
   const [specialities, setSpecialities] = useState([]);
 
@@ -56,15 +58,18 @@ const DoctorsForm = ({ navigation }) => {
   };
 
   const handleSaveDoctor = async () => {
-    const { name, speciality, attention_days, schedule } = formData;
-    if (!name || !speciality || attention_days.length === 0 || !schedule) {
+    const { name, speciality_id, attention_days, schedule } = formData;
+    if (!name || !speciality_id || attention_days.length === 0 || !schedule) {
       alert("Por favor completa todos los campos obligatorios.");
       return;
     }
 
     try {
-      await saveDoctor({ ...formData, user_id: user.user_id });
-      alert("Médico agregado con éxito.");
+      if (doctor) {       
+        await updateDoctor(doctor.id, formData);
+      } else {        
+        await saveDoctor({ ...formData, user_id: user.user_id });
+      }
       navigation.goBack();
     } catch (error) {
       console.error("Error saving doctor:", error);
@@ -73,7 +78,11 @@ const DoctorsForm = ({ navigation }) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Nuevo Médico" onClose={() => navigation.goBack()} />
+      {
+        doctor ?
+        <Header title="Editar Médico" onClose={() => navigation.goBack()} /> :
+        <Header title="Nuevo Médico" onClose={() => navigation.goBack()} /> 
+      }
       <ScrollView contentContainerStyle={styles.form}>
         <Text style={styles.sectionTitle}>Datos:</Text>
 
@@ -93,10 +102,10 @@ const DoctorsForm = ({ navigation }) => {
           {Platform.OS === "ios" ? (
             // Estilo para iOS
             <Picker
-              itemStyle={{height:50}}
-              selectedValue={formData.speciality}
-              onValueChange={(value) => handleInputChange("speciality", value)}
-            //   style={styles.pickerIOS}
+              itemStyle={{ height: 50 }}
+              selectedValue={formData.speciality_id}
+              onValueChange={(value) => handleInputChange("speciality_id", value)}
+              //   style={styles.pickerIOS}
             >
               <Picker.Item label="Seleccionar especialidad*" value="" />
               {specialities.map((spec) => (

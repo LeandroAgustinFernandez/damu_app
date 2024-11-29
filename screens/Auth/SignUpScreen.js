@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import {
   View,
-  SafeAreaView,
   Text,
   TextInput,
   TouchableOpacity,
@@ -16,7 +15,7 @@ export default function SignUpScreen({ navigation }) {
   const [name, setName] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-
+  
   const isValidPassword = (password) => {
     return (
       password.length >= 8 &&

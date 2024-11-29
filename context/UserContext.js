@@ -27,7 +27,6 @@ export const UserProvider = ({ children }) => {
   };
 
   const deleteItem = async (key) => {
-    console.log(key);
     if (Platform.OS === 'web') {
       await AsyncStorage.removeItem(key);      
     } else {

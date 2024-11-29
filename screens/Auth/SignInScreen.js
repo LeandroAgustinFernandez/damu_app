@@ -34,7 +34,7 @@ export default function SignInScreen({ navigation }) {
         clerk_id: db_user.clerk_id,
         user_id: db_user.id,
       });
-      Alert.alert('Éxito', 'Inicio de sesión exitoso');
+      // Alert.alert('Éxito', 'Inicio de sesión exitoso');
     } catch (err) {
       Alert.alert(
         'Error de autenticación',
