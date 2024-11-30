@@ -11,10 +11,10 @@ import { UserContext } from "../../context/UserContext";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons"; // Asegúrate de tener instalada @expo/vector-icons
 
 const options = [
-  { id: "1", title: "Alarmas", screen: "AlarmsList", icon: "notifications-outline" },
-  { id: "2", title: "Medicación", screen: "MedicationsList", icon: "medkit-outline" },
-  { id: "4", title: "Estudios", screen: "StudiesList", icon: "document-text-outline" },
-  { id: "5", title: "Médicos", screen: "DoctorsScreen", icon: "person-outline" }
+  { id: "1", title: "Médicos", screen: "DoctorsScreen", icon: "person-outline" },
+  { id: "2", title: "Medicación", screen: "MedicationsScreen", icon: "medkit-outline" },
+  { id: "3", title: "Alarmas", screen: "AlarmsList", icon: "notifications-outline" },
+  { id: "4", title: "Estudios", screen: "StudiesList", icon: "document-text-outline" }
 ];
 
 const HomeScreen = ({ navigation }) => {

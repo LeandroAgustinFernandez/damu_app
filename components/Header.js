@@ -2,9 +2,9 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-const Header = ({ title, onClose }) => {
+const Header = ({ title, onClose, bgColor = '#4A3F90' }) => {
   return (
-    <View style={styles.header}>
+    <View style={[styles.header, { backgroundColor: bgColor }]}>
       <TouchableOpacity onPress={onClose}>
         <MaterialIcons name="arrow-back" size={32} color="#fff" />
       </TouchableOpacity>
@@ -21,7 +21,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: '#4A3F90',
     paddingVertical: 50,
     paddingHorizontal: 16,
     borderBottomLeftRadius: 20,

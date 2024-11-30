@@ -1,10 +1,11 @@
 import HomeScreen from "../screens/Home/HomeScreen";
 import DoctorsScreen from "../screens/Doctors/DoctorsScreen";
 import DoctorsForm from "../screens/Doctors/DoctorsForm";
-import MedicatList from "../screens/Medications/MedicationsList";
 import StudiesList from "../screens/Studies/StudiesList";
 import AlarmsList from "../screens/Alarms/AlarmsList";
 import { createStackNavigator } from "@react-navigation/stack";
+import MedicationsScreen from "../screens/Medications/MedicationsScreen";
+import MedicationsForm from "../screens/Medications/MedicationsForm";
 
 const Stack = createStackNavigator();
 
@@ -17,8 +18,10 @@ export const AppStack = () => (
     <Stack.Screen name="Home" component={HomeScreen} />
     <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
     <Stack.Screen name="DoctorsForm" component={DoctorsForm} />
-    {/* <Stack.Screen name="Medications" component={MedicatList} />
-      <Stack.Screen name="Studies" component={StudiesList} />
+     <Stack.Screen name="MedicationsScreen" component={MedicationsScreen} />
+     <Stack.Screen name="MedicationsForm" component={MedicationsForm} />
+
+    {/*  <Stack.Screen name="Studies" component={StudiesList} />
       <Stack.Screen name="Alarms" component={AlarmsList} /> */}
   </Stack.Navigator>
 );

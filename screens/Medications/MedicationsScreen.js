@@ -9,52 +9,52 @@ import {
   Modal,
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
-import { getDoctorsByUserId, deleteDoctor } from "../../services/api";
+import { deleteMedications, getMedicationsByUserId } from "../../services/api";
 import { MaterialIcons } from "@expo/vector-icons";
 import Header from "../../components/Header";
 
-const DoctorsScreen = ({ navigation }) => {
-  const [doctors, setDoctors] = useState([]);
+const MedicationsScreen = ({ navigation }) => {
+  const [medications, setMedications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
-  const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [selectedMedication, setSelectedMedication] = useState(null);
   const { user } = useContext(UserContext);
 
   useEffect(() => {
     if (user) {
-      fetchDoctors();
+      fetchMedications();
     }
   }, [user]);
 
   useEffect(() => {
     const unsubscribe = navigation.addListener("focus", () => {
-      fetchDoctors();
+      fetchMedications();
     });
 
     return unsubscribe;
   }, [navigation]);
 
-  const fetchDoctors = async () => {
+  const fetchMedications = async () => {
     try {
-      setLoading(true); // Opcional: mostrar carga al refrescar
-      const userDoctors = await getDoctorsByUserId(user.user_id);
-      setDoctors(userDoctors);
+      setLoading(true);
+      const userMedications = await getMedicationsByUserId(user.user_id);
+      setMedications(userMedications);
     } catch (error) {
-      console.error("Error fetching doctors:", error);
+      console.error("Error fetching medications:", error);
     } finally {
       setLoading(false);
     }
   };
 
-  const openModal = (doctor) => {
-    setSelectedDoctor(doctor);
+  const openModal = (medication) => {
+    setSelectedMedication(medication);
     setModalVisible(true);
   };
 
   const closeModal = () => {
     setModalVisible(false);
-    setSelectedDoctor(null);
+    setSelectedMedication(null);
   };
 
   const openDeleteModal = () => {
@@ -65,10 +65,10 @@ const DoctorsScreen = ({ navigation }) => {
     setdeleteModal(false);
   };
 
-  const handleDeleteDoctor = async () => {
+  const handleDeleteMedications = async () => {
     try {
-      await deleteDoctor(selectedDoctor.id);
-      setDoctors(doctors.filter((doctor) => doctor.id !== selectedDoctor.id));
+      await deleteMedications(selectedMedication.id);
+      setMedications(medications.filter((medication) => medication.id !== selectedMedication.id));
       setdeleteModal(false);
       closeModal();
     } catch (error) {
@@ -76,45 +76,58 @@ const DoctorsScreen = ({ navigation }) => {
     }
   };
 
-  const handleEditDoctor = () => {
+  const handleEditMedication = () => {
     closeModal();
-    navigation.navigate("DoctorsForm", { doctor: selectedDoctor });
+    navigation.navigate("MedicationsForm", { medication: selectedMedication });
   };
 
-  const renderDoctor = ({ item }) => (
+  const renderMedication = ({ item }) => (
     <TouchableOpacity style={styles.card} onPress={() => openModal(item)}>
       <View style={styles.cardContent}>
-        <MaterialIcons name="person" size={24} color="#ff7f00" />
-        <Text style={styles.name}>
-          {item.speciality}: {item.name} {item.surname}
-        </Text>
+        <MaterialIcons name="medication" size={24} color="#ff7f00" />
+        <View style={styles.medicationDetails}>
+          <Text style={styles.name}>
+            {item.name} {item.dose}
+          </Text>
+          <Text style={styles.info}>Tipo: {item.dose_type}</Text>
+          <Text style={styles.info}>
+            Frecuencia: {item.frequency.join(", ")}
+          </Text>
+          <Text style={styles.info}>Horario: {item.schedule}</Text>
+        </View>
       </View>
     </TouchableOpacity>
   );
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header title="Médicos" onClose={() => navigation.goBack()} />
+      <Header
+        title="Medicación"
+        onClose={() => navigation.goBack()}
+        bgColor="#F7931E"
+      />
       {loading ? (
-        <Text style={styles.loading}>Cargando médicos...</Text>
-      ) : doctors.length === 0 ? (
-        <Text style={styles.noDoctors}>No hay médicos registrados.</Text>
+        <Text style={styles.loading}>Cargando medicación...</Text>
+      ) : medications.length === 0 ? (
+        <Text style={styles.noMedications}>
+          No hay medicamentos registrados.
+        </Text>
       ) : (
         <FlatList
-          data={doctors}
+          data={medications}
           keyExtractor={(item) => item.id.toString()}
-          renderItem={renderDoctor}
+          renderItem={renderMedication}
           style={styles.list}
         />
       )}
       <TouchableOpacity
         style={styles.addButton}
-        onPress={() => navigation.navigate("DoctorsForm")}
+        onPress={() => navigation.navigate("MedicationsForm")}
       >
         <Text style={styles.addButtonText}>+</Text>
       </TouchableOpacity>
 
-      {selectedDoctor && (
+      {selectedMedication && (
         <Modal
           transparent={true}
           animationType="none"
@@ -130,19 +143,14 @@ const DoctorsScreen = ({ navigation }) => {
                 >
                   <MaterialIcons name="close" size={24} color="#ff7f00" />
                 </TouchableOpacity>
-                <MaterialIcons name="person" size={48} color="#ff7f00" />
-                <Text style={styles.modalName}>
-                  {selectedDoctor.name} {selectedDoctor.surname}
-                </Text>
-                <Text style={styles.modalSpeciality}>
-                  {selectedDoctor.speciality}
-                </Text>
+                <MaterialIcons name="medication" size={24} color="#ff7f00" />
+                <Text style={styles.modalName}>{selectedMedication.name}</Text>
                 <Text style={styles.deleteWarningText}>
-                  ¿Desea eliminar este médico?
+                  ¿Desea eliminar este medicamento?
                 </Text>
                 <TouchableOpacity
                   style={styles.deleteConfirmButton}
-                  onPress={handleDeleteDoctor}
+                  onPress={handleDeleteMedications}
                 >
                   <Text style={styles.deleteConfirmButtonText}>Eliminar</Text>
                 </TouchableOpacity>
@@ -163,28 +171,23 @@ const DoctorsScreen = ({ navigation }) => {
                 >
                   <MaterialIcons name="close" size={24} color="#ff7f00" />
                 </TouchableOpacity>
-                <MaterialIcons name="person" size={48} color="#ff7f00" />
-                <Text style={styles.modalName}>
-                  {selectedDoctor.name} {selectedDoctor.surname}
+                <MaterialIcons name="medication" size={48} color="#ff7f00" />
+                <Text style={styles.modalName}>{selectedMedication.name}</Text>
+                <Text style={styles.modalInfo}>
+                  Dosis: {selectedMedication.dose}
                 </Text>
-                <Text style={styles.modalSpeciality}>
-                  {selectedDoctor.speciality}
+                <Text style={styles.modalInfo}>
+                  Tipo: {selectedMedication.dose_type}
                 </Text>
-                <Text style={styles.modalText}>
-                  Dirección: {selectedDoctor.address}
+                <Text style={styles.modalInfo}>
+                  Frecuencia: {selectedMedication.frequency.join(", ")}
                 </Text>
-                <Text style={styles.modalText}>
-                  Días de atención: {selectedDoctor.attention_day.join(", ")}
-                </Text>
-                <Text style={styles.modalText}>
-                  Horario: {selectedDoctor.schedule}
-                </Text>
-                <Text style={styles.modalText}>
-                  Teléfono: {selectedDoctor.phone}
+                <Text style={styles.modalInfo}>
+                  Horario: {selectedMedication.schedule}
                 </Text>
                 <TouchableOpacity
                   style={styles.editButton}
-                  onPress={handleEditDoctor}
+                  onPress={handleEditMedication}
                 >
                   <Text style={styles.editButtonText}>Editar</Text>
                 </TouchableOpacity>
@@ -207,7 +210,6 @@ const DoctorsScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 16,
     backgroundColor: "#f0f0f0",
   },
   list: {
@@ -218,7 +220,7 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginTop: 20,
   },
-  noDoctors: {
+  noMedications: {
     fontSize: 18,
     textAlign: "center",
     marginTop: 20,
@@ -228,7 +230,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginVertical: 8,
     borderRadius: 8,
-    elevation: 8, // Más sombra
+    elevation: 8,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -240,10 +242,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  medicationDetails: {
+    marginLeft: 12,
+  },
   name: {
     fontSize: 16,
-    marginLeft: 8,
-    fontWeight: "normal", // Sin negrita
+    fontWeight: "bold",
+    color: "#ff7f00",
+  },
+  info: {
+    fontSize: 14,
+    color: "#333",
   },
   addButton: {
     alignSelf: "center",
@@ -256,6 +265,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#ff7f00",
     elevation: 8,
+    marginBottom: 16,
   },
   addButtonText: {
     color: "#ff7f00",
@@ -264,7 +274,6 @@ const styles = StyleSheet.create({
   },
   modalContainer: {
     flex: 1,
-    minHeight: 500,
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "rgba(0,0,0,0.5)",
@@ -286,14 +295,9 @@ const styles = StyleSheet.create({
     color: "#ff7f00",
     marginVertical: 5,
   },
-  modalSpeciality: {
+  modalInfo: {
     fontSize: 18,
-    fontWeight: "bold",
     marginVertical: 5,
-  },
-  modalText: {
-    fontSize: 16,
-    marginVertical: 2,
   },
   editButton: {
     backgroundColor: "#4caf50",
@@ -315,6 +319,10 @@ const styles = StyleSheet.create({
     width: "80%",
     marginTop: 10,
     alignItems: "center",
+  },
+  deleteButtonText: {
+    color: "#ff7f00",
+    fontSize: 18,
   },
   deleteButtonText: {
     color: "#ff7f00",
@@ -367,4 +375,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default DoctorsScreen;
+export default MedicationsScreen;

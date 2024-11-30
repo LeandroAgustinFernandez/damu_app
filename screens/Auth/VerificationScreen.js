@@ -25,7 +25,7 @@ const VerificationScreen = ({ navigation, route }) => {
           clerk_id: db_user.clerk_id,
           user_id: db_user.id,
         });
-        Alert.alert('Éxito', 'Verificación completada. Ahora puedes iniciar sesión.');
+        Alert.alert('Éxito', 'Verificación completada. Bienvenido!.');
         navigation.navigate('SignIn'); // Redirigir al login
       } else {
         Alert.alert('Error', 'Algo salió mal. Intenta de nuevo.');

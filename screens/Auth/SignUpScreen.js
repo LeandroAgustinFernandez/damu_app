@@ -70,43 +70,53 @@ export default function SignUpScreen({ navigation }) {
         <Text style={styles.logo}>DAMU</Text>
         <Text style={styles.subtitle}>Registro</Text>
       </View>
+      <View style={styles.container}>
+        <TextInput
+          style={styles.input}
+          placeholder="Nombre"
+          placeholderTextColor="#777"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={name}
+          onChangeText={setName}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Email"
+          placeholderTextColor="#777"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Contraseña"
+          placeholderTextColor="#777"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
+        <TextInput
+          style={styles.input}
+          placeholder="Repetir contraseña"
+          placeholderTextColor="#777"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
 
-      <TextInput
-        style={styles.input}
-        placeholder="Email"
-        placeholderTextColor="#777"
-        keyboardType="email-address"
-        autoCapitalize="none"
-        value={email}
-        onChangeText={setEmail}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
-        placeholderTextColor="#777"
-        secureTextEntry
-        value={password}
-        onChangeText={setPassword}
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Repetir contraseña"
-        placeholderTextColor="#777"
-        secureTextEntry
-        value={confirmPassword}
-        onChangeText={setConfirmPassword}
-      />
+        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
+          <Text style={styles.buttonText}>Registrarse</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-        <Text style={styles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-        <Text style={styles.footerText}>
-          Ya es miembro?{' '}
-          <Text style={styles.loginText}>Iniciar sesión</Text>
-        </Text>
-      </TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
+          <Text style={styles.footerText}>
+            Ya es miembro?{' '}
+            <Text style={styles.loginText}>Iniciar sesión</Text>
+          </Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 }
@@ -127,9 +137,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    paddingHorizontal: 20,
+    paddingHorizontal: 30,
     backgroundColor: '#f2f2f2', // Color de fondo claro
   },
   title: {
