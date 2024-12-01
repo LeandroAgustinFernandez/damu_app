@@ -10,21 +10,11 @@ import {
   Platform,
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
-import { getSpecialties, saveDoctor } from "../../services/api";
+import { getSpecialties, saveDoctor, updateDoctor } from "../../services/api";
 import { MultiSelect } from "react-native-element-dropdown";
 import { Picker } from "@react-native-picker/picker";
 import Header from "../../components/Header";
-import { updateDoctor } from "../../services/api";
-
-const daysOfWeek = [
-  { label: "Lunes", value: "Lunes" },
-  { label: "Martes", value: "Martes" },
-  { label: "Miércoles", value: "Miércoles" },
-  { label: "Jueves", value: "Jueves" },
-  { label: "Viernes", value: "Viernes" },
-  { label: "Sábado", value: "Sábado" },
-  { label: "Domingo", value: "Domingo" },
-];
+import { daysOfWeek } from "../../constants/days";
 
 const DoctorsForm = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
@@ -37,7 +27,7 @@ const DoctorsForm = ({ navigation, route }) => {
     speciality_id: doctor?.speciality_id || "",
     attention_days: doctor?.attention_day || [],
     schedule: doctor?.schedule || "",
-    additional_info: doctor?.additional_info || "",
+    additional_info: doctor?.additionale_info || "",
   });
   const [specialities, setSpecialities] = useState([]);
 
@@ -100,12 +90,10 @@ const DoctorsForm = ({ navigation, route }) => {
         />
         <View style={styles.inputContainer}>
           {Platform.OS === "ios" ? (
-            // Estilo para iOS
             <Picker
               itemStyle={{ height: 50 }}
               selectedValue={formData.speciality_id}
               onValueChange={(value) => handleInputChange("speciality_id", value)}
-              //   style={styles.pickerIOS}
             >
               <Picker.Item label="Seleccionar especialidad*" value="" />
               {specialities.map((spec) => (

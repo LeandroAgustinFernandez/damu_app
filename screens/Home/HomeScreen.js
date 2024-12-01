@@ -1,35 +1,16 @@
 import React, { useContext } from "react";
-import {
-  StyleSheet,
-  SafeAreaView,
-  FlatList,
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { StyleSheet, SafeAreaView, FlatList, View, Text, TouchableOpacity} from "react-native";
 import { UserContext } from "../../context/UserContext";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons"; // Asegúrate de tener instalada @expo/vector-icons
-
-const options = [
-  { id: "1", title: "Médicos", screen: "DoctorsScreen", icon: "person-outline" },
-  { id: "2", title: "Medicación", screen: "MedicationsScreen", icon: "medkit-outline" },
-  { id: "3", title: "Alarmas", screen: "AlarmsList", icon: "notifications-outline" },
-  { id: "4", title: "Estudios", screen: "StudiesList", icon: "document-text-outline" }
-];
+import { Ionicons } from "@expo/vector-icons";
+import HomeCard from "../../components/HomeCard";
+import { menuOptions } from "../../constants/menu";
 
 const HomeScreen = ({ navigation }) => {
-  const { user, logout } = useContext(UserContext);
+  const { logout } = useContext(UserContext);
 
-  const handlePress = (screen) => {
-    navigation.navigate(screen);
-  };
-
-  const handleLogout = async () => {
-    console.log("Entro logout")
-    await logout();
-    // navigation.navigate("SignIn");
-  };
-
+  const handlePress = (screen) => navigation.navigate(screen);
+  const handleLogout = async () => await logout();
+  
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.header}>
@@ -40,20 +21,13 @@ const HomeScreen = ({ navigation }) => {
         </TouchableOpacity>
       </View>
 
-      {/* Options grid */}
       <FlatList
-        data={options}
+        data={menuOptions}
         keyExtractor={(item) => item.id}
         numColumns={2}
         contentContainerStyle={styles.list}
         renderItem={({ item }) => (
-          <TouchableOpacity
-            style={styles.card}
-            onPress={() => handlePress(item.screen)}
-          >
-            <Ionicons name={item.icon} size={50} color="#F7931E" />
-            <Text style={styles.cardTitle}>{item.title}</Text>
-          </TouchableOpacity>
+          <HomeCard item={item} handlePress={handlePress}/>
         )}
       />
     </SafeAreaView>
@@ -82,34 +56,10 @@ const styles = StyleSheet.create({
     color: "white",
   },
   logoutButton: {
-    position: "absolute",  // Posicionamos el icono en la parte superior derecha
+    position: "absolute",
     top: 20,
     right: 20,
-  },
-  list: {
-    paddingHorizontal: 10,
-    paddingVertical: 20,
-  },
-  card: {
-    backgroundColor: "white",
-    flex: 1,
-    margin: 10,
-    height: 120,  // Tamaño cuadrado
-    borderRadius: 15,
-    alignItems: "center",
-    justifyContent: "center",
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5,
-  },
-  cardTitle: {
-    marginTop: 10,
-    fontSize: 14,
-    fontWeight: "bold",
-    color: "#4B358D",
-  },
+  }
 });
 
 export default HomeScreen;

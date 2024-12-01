@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 import { UserContext } from '../../context/UserContext';
-import { getUserToDatabase } from '../../services/api';
-import { FontAwesome } from '@expo/vector-icons'; // Para los íconos de Facebook y Google
+import { getUserDb } from '../../services/api';
+import { FontAwesome } from '@expo/vector-icons';
 
 export default function SignInScreen({ navigation }) {
   const { signIn, isLoaded } = useSignIn();
@@ -27,14 +27,13 @@ export default function SignInScreen({ navigation }) {
         password: password,
       });
 
-      let db_user = await getUserToDatabase(email);
+      let db_user = await getUserDb(email);
       await saveUser({
         email: db_user.email,
         name: db_user.name,
         clerk_id: db_user.clerk_id,
         user_id: db_user.id,
       });
-      // Alert.alert('Éxito', 'Inicio de sesión exitoso');
     } catch (err) {
       Alert.alert(
         'Error de autenticación',

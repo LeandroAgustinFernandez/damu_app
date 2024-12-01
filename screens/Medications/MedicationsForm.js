@@ -1,29 +1,10 @@
 import React, { useState, useContext } from "react";
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  SafeAreaView,
-} from "react-native";
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView, SafeAreaView} from "react-native";
 import { UserContext } from "../../context/UserContext";
 import { saveMedication, updateMedications } from "../../services/api";
-// import { saveMedication, updateMedication } from "../../services/api";
 import Header from "../../components/Header";
 import { MultiSelect } from "react-native-element-dropdown";
-
-
-const daysOfWeek = [
-    { label: "Lunes", value: "Lunes" },
-    { label: "Martes", value: "Martes" },
-    { label: "Miércoles", value: "Miércoles" },
-    { label: "Jueves", value: "Jueves" },
-    { label: "Viernes", value: "Viernes" },
-    { label: "Sábado", value: "Sábado" },
-    { label: "Domingo", value: "Domingo" },
-  ];
+import { daysOfWeek } from "../../constants/days";
 
 const MedicationsForm = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
@@ -105,16 +86,12 @@ const MedicationsForm = ({ navigation, route }) => {
           onChangeText={(value) => handleInputChange("schedule", value)}
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={handleSaveMedication}>
+        <TouchableOpacity
+          style={styles.saveButton}
+          onPress={handleSaveMedication}
+        >
           <Text style={styles.saveButtonText}>Guardar</Text>
         </TouchableOpacity>
-        {/* Navegación o funcionalidad para crear alarma 
-        <TouchableOpacity
-          style={styles.createAlarmButton}
-          onPress={() => return}
-        >
-          <Text style={styles.createAlarmText}>Guardar</Text>
-        </TouchableOpacity>*/}
       </ScrollView>
     </SafeAreaView>
   );
@@ -185,7 +162,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     borderRadius: 10,
   },
-  
 });
 
 export default MedicationsForm;
