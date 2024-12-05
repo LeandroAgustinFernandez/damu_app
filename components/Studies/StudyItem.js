@@ -2,7 +2,7 @@ import React from "react";
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
-const StudyItem = ({ item, handlePress }) => (
+const Study = ({ item, handlePress }) => (
   <TouchableOpacity style={styles.card} onPress={() => handlePress(item)}>
     <View style={styles.cardContent}>
       <MaterialIcons name="assignment" size={24} color="#F7931E" />
@@ -10,7 +10,7 @@ const StudyItem = ({ item, handlePress }) => (
         <Text style={styles.name}>
           {item.name}
         </Text>
-        <Text style={styles.info}>Fecha: {item.date}</Text>
+        <Text style={styles.info}>Fecha: {item.date.toLocaleDateString()}</Text>
       </View>
     </View>
   </TouchableOpacity>
@@ -48,4 +48,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default StudyItem;
+export default Study;

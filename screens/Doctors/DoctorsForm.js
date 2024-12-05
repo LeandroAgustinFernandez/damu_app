@@ -102,8 +102,8 @@ const DoctorsForm = ({ navigation, route }) => {
             </Picker>
           ) : (
             <Picker
-              selectedValue={formData.speciality}
-              onValueChange={(value) => handleInputChange("speciality", value)}
+              selectedValue={formData.speciality_id}
+              onValueChange={(value) => handleInputChange("speciality_id", value)}
               style={styles.picker}
             >
               <Picker.Item label="Seleccionar especialidad*" value="" />

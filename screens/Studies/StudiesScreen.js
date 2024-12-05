@@ -115,7 +115,7 @@ const StudiesScreen = ({ navigation }) => {
               icon="file-medical"
               onClose={closeModal}
               data={{
-                Fecha: selectedStudy.date,
+                Fecha: selectedStudy.date.toLocaleDateString(),
                 Tipo: selectedStudy.type,
                 Descripción: selectedStudy.description,
               }}

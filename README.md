@@ -1,3 +1,10 @@
+Tecnologías:
+- Entorno: Expo Go
+- Lenguaje: React Native (JavaScript)
+- Base de datos: NeonDatabase
+- Autenticacion: Clerk
+- Almacenamiento: Cloudinary (A definir) 
+
 Estructura del proyecto:
 
 DAMU/
@@ -25,7 +32,15 @@ DAMU/
 │   │   ├── AlarmaList.js     # Lista de alarmas
 │   │   ├── AlarmaForm.js     # Formulario para crear/editar alarmas
 ├── services/                 # Servicios para conexión externa
-│   ├── api.js                # Configuración y consultas a NeonDatabase
+│   ├── api/                # Configuración y consultas a NeonDatabase
+│   │   ├── connection.js     # Conexion a la base de datos
+│   │   ├── doctors.js        # Consultas a la base de datos - doctors
+│   │   ├── studies.js        # Consultas a la base de datos - studies
+│   │   ├── medications.js    # Consultas a la base de datos - medications
+│   │   ├── specialities.js   # Consultas a la base de datos - specialities
+│   │   ├── studies.js        # Consultas a la base de datos - studies
+│   │   ├── users.js          # Consultas a la base de datos - user
+│   │   ├── index.js          # Archivo configuración exports
 │   ├── firebaseConfig.js     # Configuración de Firebase
 │   ├── notificationService.js# Configuración de notificaciones
 ├── styles/                   # Estilos compartidos
