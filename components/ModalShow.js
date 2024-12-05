@@ -28,7 +28,10 @@ const ModalShow = ({
           <Text style={styles.editButtonText}>Editar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.deleteButton} onPress={() => onDelete()}>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => onDelete()}
+        >
           <Text style={styles.deleteButtonText}>Eliminar</Text>
         </TouchableOpacity>
       </View>

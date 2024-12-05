@@ -14,7 +14,7 @@ export const menuOptions = [
   {
     id: "3",
     title: "Alarmas",
-    screen: "AlarmsList",
+    screen: "AlarmsScreen",
     icon: "notifications-outline",
   },
   {

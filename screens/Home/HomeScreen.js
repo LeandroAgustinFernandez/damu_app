@@ -34,6 +34,7 @@ const HomeScreen = ({ navigation }) => {
   );
 };
 
+// Estilos de componente
 const styles = StyleSheet.create({
   container: {
     flex: 1,

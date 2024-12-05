@@ -3,7 +3,7 @@ import DoctorsScreen from "../screens/Doctors/DoctorsScreen";
 import MedicationsScreen from "../screens/Medications/MedicationsScreen";
 import DoctorsForm from "../screens/Doctors/DoctorsForm";
 import StudiesScreen from "../screens/Studies/StudiesScreen";
-import AlarmsList from "../screens/Alarms/AlarmsList";
+// import AlarmsScreen from "../screens/Alarms/AlarmsScreen";
 import { createStackNavigator } from "@react-navigation/stack";
 import MedicationsForm from "../screens/Medications/MedicationsForm";
 import StudiesForm from "../screens/Studies/StudiesForm";
@@ -24,6 +24,6 @@ export const AppStack = () => (
     <Stack.Screen name="StudiesScreen" component={StudiesScreen} />
     <Stack.Screen name="StudiesForm" component={StudiesForm} />
 
-    {/* <Stack.Screen name="Alarms" component={AlarmsList} /> */}
+    {/* <Stack.Screen name="AlarmsScreen" component={AlarmsScreen} /> */}
   </Stack.Navigator>
 );

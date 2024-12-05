@@ -1,3 +1,12 @@
+Instalacion Librerias:
+- npm install
+
+Ejecucion:
+- Descargar App Expo Go.
+- npm start
+- Para ejecutar en el navegador presionar "w"
+- Para ejecutar en dispositivo mobil escanear QR.
+
 Tecnologías:
 - Entorno: Expo Go
 - Lenguaje: React Native (JavaScript)
@@ -40,6 +49,7 @@ DAMU/
 │   │   ├── specialities.js   # Consultas a la base de datos - specialities
 │   │   ├── studies.js        # Consultas a la base de datos - studies
 │   │   ├── users.js          # Consultas a la base de datos - user
+│   │   ├── alarms.js         # Consultas a la base de datos - alarms
 │   │   ├── index.js          # Archivo configuración exports
 │   ├── firebaseConfig.js     # Configuración de Firebase
 │   ├── notificationService.js# Configuración de notificaciones
