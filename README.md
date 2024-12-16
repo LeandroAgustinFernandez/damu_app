@@ -25,6 +25,7 @@ DAMU/
 │   │   ├── MedicationItem.js # Componente medicacion item
 │   ├── Studies/              # Componente para la seccion de estudios
 │   │   ├── StudyItem.js      # Componente estudio item
+│   ├── DownloadLink.js       # Componente para descarga de archivo
 │   ├── Header.js             # Componente para el header de las secciones
 │   ├── HomeCard.js           # Componente Card de las secciones de la Home
 │   ├── index.js              # Archivo configuración exports

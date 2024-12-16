@@ -1,15 +1,30 @@
 import React, { useEffect, useState, useContext } from "react";
-import { SafeAreaView, Text, FlatList, TouchableOpacity, StyleSheet, Modal} from "react-native";
+import {
+  SafeAreaView,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  StyleSheet,
+  Modal,
+} from "react-native";
 import { UserContext } from "../../context/UserContext";
 import { getDoctors, deleteDoctor } from "../../services/api";
-import { Header, Doctor, ModalDelete, ModalShow } from "../../components";
+import {
+  Header,
+  Doctor,
+  ModalDelete,
+  ModalShow,
+  Filter,
+} from "../../components";
 
 const DoctorsScreen = ({ navigation }) => {
   const [doctors, setDoctors] = useState([]);
+  const [filteredDoctors, setFilteredDoctors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalVisible, setModalVisible] = useState(false);
   const [deleteModal, setdeleteModal] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
+  const [searchText, setSearchText] = useState("");
   const { user } = useContext(UserContext);
 
   useEffect(() => {
@@ -29,10 +44,25 @@ const DoctorsScreen = ({ navigation }) => {
       setLoading(true);
       const userDoctors = await getDoctors(user.user_id);
       setDoctors(userDoctors);
+      setFilteredDoctors(userDoctors); // Inicialmente todos los médicos
     } catch (error) {
       console.error("Error fetching doctors:", error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSearch = (text) => {
+    setSearchText(text);
+    if (text === "") {
+      setFilteredDoctors(doctors);
+    } else {
+      const filtered = doctors.filter((doctor) =>
+        `${doctor.name.toLowerCase()} ${doctor.surname.toLowerCase()}`.includes(
+          text.toLowerCase()
+        )
+      );
+      setFilteredDoctors(filtered);
     }
   };
 
@@ -52,7 +82,11 @@ const DoctorsScreen = ({ navigation }) => {
   const handleDeleteDoctor = async () => {
     try {
       await deleteDoctor(selectedDoctor.id);
-      setDoctors(doctors.filter((doctor) => doctor.id !== selectedDoctor.id));
+      const updatedDoctors = doctors.filter(
+        (doctor) => doctor.id !== selectedDoctor.id
+      );
+      setDoctors(updatedDoctors);
+      setFilteredDoctors(updatedDoctors);
       setdeleteModal(false);
       closeModal();
     } catch (error) {
@@ -68,13 +102,18 @@ const DoctorsScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={styles.container}>
       <Header title="Médicos" onClose={() => navigation.goBack()} />
+      <Filter handleSearch={handleSearch} text={searchText} />
       {loading ? (
         <Text style={styles.loading}>Cargando médicos...</Text>
-      ) : doctors.length === 0 ? (
-        <Text style={styles.noDoctors}>No hay médicos registrados.</Text>
+      ) : filteredDoctors.length === 0 ? (
+        <Text style={styles.noDoctors}>
+          {searchText
+            ? "No se encontraron médicos."
+            : "No hay médicos registrados."}
+        </Text>
       ) : (
         <FlatList
-          data={doctors}
+          data={filteredDoctors}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <Doctor item={item} handlePress={openModal} />
@@ -132,6 +171,11 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f0f0f0",
   },
+  filterButtonText: {
+    marginLeft: 8,
+    color: "#ff7f00",
+    fontSize: 16,
+  },
   list: {
     padding: 16,
   },
@@ -161,13 +205,6 @@ const styles = StyleSheet.create({
     color: "#ff7f00",
     fontSize: 36,
     fontWeight: "bold",
-  },
-  modalContainer: {
-    flex: 1,
-    minHeight: 500,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "rgba(0,0,0,0.5)",
   },
 });
 
