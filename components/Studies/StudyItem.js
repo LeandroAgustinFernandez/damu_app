@@ -7,9 +7,7 @@ const Study = ({ item, handlePress }) => (
     <View style={styles.cardContent}>
       <MaterialIcons name="assignment" size={24} color="#F7931E" />
       <View style={styles.studyDetails}>
-        <Text style={styles.name}>
-          {item.name}
-        </Text>
+        <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.info}>Fecha: {item.date.toLocaleDateString()}</Text>
       </View>
     </View>
@@ -40,7 +38,7 @@ const styles = StyleSheet.create({
   name: {
     fontSize: 16,
     fontWeight: "bold",
-    color: "#F7931E", // Naranja similar al de tus botones
+    color: "#F7931E",
   },
   info: {
     fontSize: 14,

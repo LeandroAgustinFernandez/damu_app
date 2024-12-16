@@ -1,5 +1,6 @@
 import { MaterialIcons } from "@expo/vector-icons";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { DownloadLink } from ".";
 
 const ModalShow = ({
   title,
@@ -9,6 +10,7 @@ const ModalShow = ({
   data,
   onEdit,
   onDelete,
+  file = false
 }) => {
   return (
     <View style={styles.modalContainer}>
@@ -24,6 +26,7 @@ const ModalShow = ({
             {key}: {value}
           </Text>
         ))}
+        {file && <DownloadLink file={file}/>}
         <TouchableOpacity style={styles.editButton} onPress={onEdit}>
           <Text style={styles.editButtonText}>Editar</Text>
         </TouchableOpacity>

@@ -3,7 +3,7 @@ import sql from './connection';
 export const getStudies = async (userId) => {
   try {
     const response = await sql`
-      SELECT s.id, s.name, s.date, s.doctor_name, s.file_name, s.additionale_info
+      SELECT s.id, s.name, s.date, s.doctor_name, s.file_name, s.file_url, s.additionale_info
       FROM medical_studies s
       WHERE s.user_id = ${userId}
     `;
@@ -17,8 +17,8 @@ export const getStudies = async (userId) => {
 export const saveStudy = async (data) => {
   try {
     const result = await sql`
-      INSERT INTO medical_studies (user_id, name, date, doctor_name, file_name, additionale_info)
-      VALUES (${data.user_id}, ${data.name}, ${data.date}, ${data.doctor_name}, ${data.file_name}, ${data.additionale_info})
+      INSERT INTO medical_studies (user_id, name, date, doctor_name, file_name, file_url, additionale_info)
+      VALUES (${data.user_id}, ${data.name}, ${data.date}, ${data.doctor_name}, ${data.file_name}, ${data.file_url}, ${data.additionale_info})
     `;
     return result;
   } catch (error) {
@@ -36,6 +36,7 @@ export const updateStudy = async (studyId, updatedData) => {
         date = ${updatedData.date},
         doctor_name = ${updatedData.doctor_name},
         file_name = ${updatedData.file_name},
+        file_url = ${updatedData.file_url},
         additionale_info = ${updatedData.additionale_info}
       WHERE id = ${studyId}
     `;

@@ -104,7 +104,7 @@ const StudiesScreen = ({ navigation }) => {
           {deleteModal ? (
             <ModalDelete
               title={selectedStudy.name}
-              icon="file-medical"
+              icon="assignment"
               onClose={closeDeleteModal}
               label="¿Desea eliminar este estudio?"
               onDelete={handleDeleteStudy}
@@ -112,15 +112,16 @@ const StudiesScreen = ({ navigation }) => {
           ) : (
             <ModalShow
               title={selectedStudy.name}
-              icon="file-medical"
+              icon="assignment"
               onClose={closeModal}
               data={{
-                Fecha: selectedStudy.date.toLocaleDateString(),
-                Tipo: selectedStudy.type,
-                Descripción: selectedStudy.description,
+                "Indicado por": selectedStudy.doctor_name,
+                Archivo: selectedStudy.file_name
               }}
               onEdit={handleEditStudy}
               onDelete={openDeleteModal}
+              subtitle={selectedStudy.date.toLocaleDateString()}
+              file={{uri: selectedStudy.file_url, name: selectedStudy.file_name}}
             />
           )}
         </Modal>
