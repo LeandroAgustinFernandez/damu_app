@@ -1,8 +1,9 @@
 import React, { useEffect, useState, useContext } from "react";
 import { SafeAreaView, Text, FlatList, TouchableOpacity, StyleSheet, Modal } from "react-native";
 import { UserContext } from "../../context/UserContext";
-import { getStudies, deleteStudy } from "../../services/api";
+import { getStudies, deleteStudy } from "../../services";
 import { Header, Study, ModalDelete, ModalShow } from "../../components";
+import { ScreenStyles } from "../../styles";
 
 const StudiesScreen = ({ navigation }) => {
   const [studies, setStudies] = useState([]);
@@ -67,16 +68,16 @@ const StudiesScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={ScreenStyles.container}>
       <Header
         title="Estudios Médicos"
         onClose={() => navigation.goBack()}
         bgColor="#F7931E"
       />
       {loading ? (
-        <Text style={styles.loading}>Cargando estudios...</Text>
+        <Text style={ScreenStyles.loading}>Cargando estudios...</Text>
       ) : studies.length === 0 ? (
-        <Text style={styles.noStudies}>No hay estudios registrados.</Text>
+        <Text style={ScreenStyles.noItems}>No hay estudios registrados.</Text>
       ) : (
         <FlatList
           data={studies}
@@ -84,14 +85,14 @@ const StudiesScreen = ({ navigation }) => {
           renderItem={({ item }) => (
             <Study item={item} handlePress={openModal} />
           )}
-          style={styles.list}
+          style={ScreenStyles.list}
         />
       )}
       <TouchableOpacity
-        style={styles.addButton}
+        style={ScreenStyles.addButton}
         onPress={() => navigation.navigate("StudiesForm")}
       >
-        <Text style={styles.addButtonText}>+</Text>
+        <Text style={ScreenStyles.addButtonText}>+</Text>
       </TouchableOpacity>
 
       {selectedStudy && (
@@ -129,43 +130,5 @@ const StudiesScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-  },
-  list: {
-    padding: 16,
-  },
-  loading: {
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 20,
-  },
-  noStudies: {
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 20,
-  },
-  addButton: {
-    alignSelf: "center",
-    backgroundColor: "#fff",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#ff7f00",
-    elevation: 8,
-    marginBottom: 16,
-  },
-  addButtonText: {
-    color: "#ff7f00",
-    fontSize: 36,
-    fontWeight: "bold",
-  },
-});
 
 export default StudiesScreen;

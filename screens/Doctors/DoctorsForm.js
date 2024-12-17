@@ -4,17 +4,18 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   ScrollView,
   SafeAreaView,
   Platform,
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
-import { getSpecialties, saveDoctor, updateDoctor } from "../../services/api";
+import { getSpecialties, saveDoctor, updateDoctor } from "../../services";
 import { MultiSelect } from "react-native-element-dropdown";
 import { Picker } from "@react-native-picker/picker";
 import Header from "../../components/Header";
 import { daysOfWeek } from "../../constants/days";
+import { ModalAlert } from "../../components";
+import { FormStyles } from "../../styles";
 
 const DoctorsForm = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
@@ -30,6 +31,8 @@ const DoctorsForm = ({ navigation, route }) => {
     additional_info: doctor?.additionale_info || "",
   });
   const [specialities, setSpecialities] = useState([]);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalProps, setModalProps] = useState({});
 
   useEffect(() => {
     const fetchSpecialities = async () => {
@@ -55,45 +58,66 @@ const DoctorsForm = ({ navigation, route }) => {
     }
 
     try {
-      if (doctor) {       
-        await updateDoctor(doctor.id, formData);
-      } else {        
-        await saveDoctor({ ...formData, user_id: user.user_id });
+      let response;
+      if (doctor) {
+        response = await updateDoctor(doctor.id, formData);
+      } else {
+        response = await saveDoctor({ ...formData, user_id: user.user_id });
       }
-      navigation.goBack();
+      setModalProps({
+        iconStatus: "check-circle",
+        iconStatusColor: "#4CAF50",
+        message: "El médico se guardo correctamente!",
+        onClose: () => {
+          setModalVisible(false);
+          navigation.goBack();
+        },
+      });
+      setModalVisible(true);
     } catch (error) {
       console.error("Error saving doctor:", error);
+      setModalProps({
+        iconStatus: "close-circle",
+        iconStatusColor: "#ff0000",
+        message: "Hubo un error al tratar de guardar el registro.",
+        onClose: () => {
+          setModalVisible(false);
+          navigation.goBack();
+        },
+      });
     }
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      {
-        doctor ?
-        <Header title="Editar Médico" onClose={() => navigation.goBack()} /> :
-        <Header title="Nuevo Médico" onClose={() => navigation.goBack()} /> 
-      }
-      <ScrollView contentContainerStyle={styles.form}>
-        <Text style={styles.sectionTitle}>Datos:</Text>
+    <SafeAreaView style={FormStyles.container}>
+      {doctor ? (
+        <Header title="Editar Médico" onClose={() => navigation.goBack()} />
+      ) : (
+        <Header title="Nuevo Médico" onClose={() => navigation.goBack()} />
+      )}
+      <ScrollView contentContainerStyle={FormStyles.form}>
+        <Text style={FormStyles.sectionTitle}>Datos:</Text>
 
         <TextInput
-          style={styles.input}
+          style={FormStyles.input}
           placeholder="Nombre"
           value={formData.name}
           onChangeText={(value) => handleInputChange("name", value)}
         />
         <TextInput
-          style={styles.input}
+          style={FormStyles.input}
           placeholder="Apellido"
           value={formData.surname}
           onChangeText={(value) => handleInputChange("surname", value)}
         />
-        <View style={styles.inputContainer}>
+        <View style={FormStyles.inputContainer}>
           {Platform.OS === "ios" ? (
             <Picker
               itemStyle={{ height: 50 }}
               selectedValue={formData.speciality_id}
-              onValueChange={(value) => handleInputChange("speciality_id", value)}
+              onValueChange={(value) =>
+                handleInputChange("speciality_id", value)
+              }
             >
               <Picker.Item label="Seleccionar especialidad*" value="" />
               {specialities.map((spec) => (
@@ -103,8 +127,10 @@ const DoctorsForm = ({ navigation, route }) => {
           ) : (
             <Picker
               selectedValue={formData.speciality_id}
-              onValueChange={(value) => handleInputChange("speciality_id", value)}
-              style={styles.picker}
+              onValueChange={(value) =>
+                handleInputChange("speciality_id", value)
+              }
+              style={[FormStyles.multiSelect,{ height: 50 }]}
             >
               <Picker.Item label="Seleccionar especialidad*" value="" />
               {specialities.map((spec) => (
@@ -115,13 +141,13 @@ const DoctorsForm = ({ navigation, route }) => {
         </View>
 
         <TextInput
-          style={styles.input}
+          style={FormStyles.input}
           placeholder="Dirección"
           value={formData.address}
           onChangeText={(value) => handleInputChange("address", value)}
         />
 
-        <View style={styles.inputContainer}>
+        <View style={FormStyles.inputContainer}>
           <MultiSelect
             data={daysOfWeek}
             labelField="label"
@@ -129,121 +155,53 @@ const DoctorsForm = ({ navigation, route }) => {
             value={formData.attention_days}
             onChange={(values) => handleInputChange("attention_days", values)}
             placeholder="Días de atención*"
-            style={styles.multiSelect}
-            selectedStyle={styles.selectedStyle}
+            style={FormStyles.multiSelect}
+            selectedStyle={FormStyles.selectedStyle}
+            renderItem={(item) => {
+              const isSelected = formData.attention_days.includes(item.value);
+              let bgColor = isSelected ? "#e0e0e0" : "white"
+              return (
+                <View style={[{backgroundColor: bgColor}, FormStyles.selectedItemStyle]}>
+                  <Text>{item.label}</Text>
+                </View>
+              );
+            }}
           />
         </View>
 
         <TextInput
-          style={styles.input}
+          style={FormStyles.input}
           placeholder="Horario de atención (HH:MM - HH:MM)*"
           value={formData.schedule}
           onChangeText={(value) => handleInputChange("schedule", value)}
         />
 
         <TextInput
-          style={styles.input}
+          style={FormStyles.input}
           placeholder="Teléfono"
           value={formData.phone}
           onChangeText={(value) => handleInputChange("phone", value)}
         />
 
         <TextInput
-          style={[styles.input, styles.textArea]}
+          style={[FormStyles.input, FormStyles.textArea]}
           placeholder="Información adicional"
           value={formData.additional_info}
           onChangeText={(value) => handleInputChange("additional_info", value)}
           multiline
         />
 
-        <TouchableOpacity style={styles.saveButton} onPress={handleSaveDoctor}>
-          <Text style={styles.saveButtonText}>Guardar</Text>
+        <TouchableOpacity style={FormStyles.saveButton} onPress={handleSaveDoctor}>
+          <Text style={FormStyles.saveButtonText}>Guardar</Text>
         </TouchableOpacity>
+        <ModalAlert
+          visible={modalVisible}
+          onClose={() => setModalVisible(false)}
+          {...modalProps}
+        />
       </ScrollView>
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-  },
-  form: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    color: "#4B3F72",
-    marginBottom: 10,
-  },
-  input: {
-    backgroundColor: "#fff",
-    padding: 15,
-    borderRadius: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    marginBottom: 15,
-  },
-  inputContainer: {
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    marginBottom: 15,
-    borderWidth: 0,
-  },
-  pickerIOS: {
-    height: 50,
-    width: "100%",
-    paddingHorizontal: 15,
-    backgroundColor: "#fff",
-  },
-  picker: {
-    paddingHorizontal: 15,
-    height: 50,
-  },
-  multiSelect: {
-    padding: 15,
-    backgroundColor: "#fff",
-    borderRadius: 10,
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-  },
-  selectedStyle: {
-    backgroundColor: "#e0e0e0",
-    borderRadius: 10,
-  },
-  textArea: {
-    height: 100,
-    textAlignVertical: "top",
-  },
-  saveButton: {
-    backgroundColor: "#FF8C00",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-  },
-  saveButtonText: {
-    color: "#fff",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
 
 export default DoctorsForm;

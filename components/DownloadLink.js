@@ -1,7 +1,8 @@
 import React from "react";
-import { Text, StyleSheet, Pressable, Platform, Linking, Alert } from "react-native";
+import { Text, Pressable, Platform, Alert } from "react-native";
 import * as FileSystem from "expo-file-system";
 import * as Sharing from "expo-sharing";
+import { ComponentsStyle } from '../styles';
 
 const DownloadLink = ({ file }) => {
   const handleDownload = async () => {
@@ -34,19 +35,10 @@ const DownloadLink = ({ file }) => {
   return (
     file && (
       <Pressable onPress={handleDownload}>
-        <Text style={styles.link}>Descargar Archivo</Text>
+        <Text style={ComponentsStyle.link}>Descargar Archivo</Text>
       </Pressable>
     )
   );
 };
-
-const styles = StyleSheet.create({
-  link: {
-    color: "#007BFF",
-    textDecorationLine: "underline",
-    fontSize: 16,
-    marginVertical: 8,
-  },
-});
 
 export default DownloadLink;

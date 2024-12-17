@@ -4,13 +4,12 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Alert,
 } from 'react-native';
 import { useSignIn } from '@clerk/clerk-expo';
 import { UserContext } from '../../context/UserContext';
-import { getUserDb } from '../../services/api';
-import { FontAwesome } from '@expo/vector-icons';
+import { getUserDb } from '../../services';
+import { AuthStyles } from '../../styles';
 
 export default function SignInScreen({ navigation }) {
   const { signIn, isLoaded } = useSignIn();
@@ -43,11 +42,11 @@ export default function SignInScreen({ navigation }) {
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>DAMU</Text>
+    <View style={AuthStyles.container}>
+      <Text style={AuthStyles.logo}>DAMU</Text>
 
       <TextInput
-        style={styles.input}
+        style={AuthStyles.input}
         placeholder="Email"
         placeholderTextColor="#ccc"
         keyboardType="email-address"
@@ -57,7 +56,7 @@ export default function SignInScreen({ navigation }) {
       />
 
       <TextInput
-        style={styles.input}
+        style={AuthStyles.input}
         placeholder="Contraseña"
         placeholderTextColor="#ccc"
         secureTextEntry
@@ -66,92 +65,29 @@ export default function SignInScreen({ navigation }) {
       />
 
       <TouchableOpacity onPress={() => Alert.alert('Recuperar contraseña')}>
-        <Text style={styles.forgotPassword}>¿Olvidaste la contraseña? <Text style={styles.linkText}>Click acá</Text></Text>
+        <Text style={AuthStyles.forgotPassword}>¿Olvidaste la contraseña? <Text style={AuthStyles.linkText}>Click acá</Text></Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={handleSignIn}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
+      <TouchableOpacity style={AuthStyles.button} onPress={handleSignIn}>
+        <Text style={AuthStyles.buttonText}>Iniciar Sesión</Text>
       </TouchableOpacity>
 
-      {/* <View style={styles.socialButtons}>
-        <TouchableOpacity style={styles.socialButton}>
+      {/* <View style={AuthStyles.socialButtons}>
+        <TouchableOpacity style={AuthStyles.socialButton}>
           <FontAwesome name="facebook" size={32} color="#4267B2" />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.socialButton}>
+        <TouchableOpacity style={AuthStyles.socialButton}>
           <FontAwesome name="google" size={32} color="#DB4437" />
         </TouchableOpacity>
       </View> */}
 
       <TouchableOpacity
-        style={styles.registerButton}
+        style={AuthStyles.registerButton}
         onPress={() => navigation.navigate('SignUp')}
       >
-        <Text style={styles.registerText}>Registrarse</Text>
+        <Text style={AuthStyles.registerText}>Registrarse</Text>
       </TouchableOpacity>
     </View>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#4B358D', // Fondo azul oscuro
-    paddingHorizontal: 30,
-    justifyContent: 'center',
-  },
-  logo: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: '#F7931E', // Naranja
-    textAlign: 'center',
-    marginBottom: 50,
-  },
-  input: {
-    height: 50,
-    borderBottomWidth: 2,
-    borderBottomColor: '#F7931E', // Línea naranja
-    marginBottom: 25,
-    fontSize: 18,
-    color: 'white',
-  },
-  forgotPassword: {
-    color: 'white',
-    textAlign: 'right',
-    marginBottom: 30,
-  },
-  linkText: {
-    color: '#F7931E',
-    fontWeight: 'bold',
-  },
-  button: {
-    backgroundColor: '#6C56C1', // Botón de inicio de sesión
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-    marginBottom: 20,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  socialButtons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    marginBottom: 30,
-  },
-  socialButton: {
-    marginHorizontal: 20,
-  },
-  registerButton: {
-    backgroundColor: '#6C56C1',
-    paddingVertical: 15,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  registerText: {
-    color: '#F7931E',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-});

@@ -10,8 +10,7 @@ import StudiesForm from "../screens/Studies/StudiesForm";
 
 const Stack = createStackNavigator();
 
-// Stack principal de la app (post-login)
-export const AppStack = () => (
+export const AppNavigator = () => (
   <Stack.Navigator
     initialRouteName="Home"
     screenOptions={{ headerShown: false }}

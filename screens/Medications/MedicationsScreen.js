@@ -4,12 +4,12 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
   Modal,
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
-import { deleteMedications, getMedications } from "../../services/api";
+import { deleteMedications, getMedications } from "../../services";
 import { Header, Medication, ModalDelete, ModalShow } from "../../components";
+import { ScreenStyles } from "../../styles";
 
 const MedicationsScreen = ({ navigation }) => {
   const [medications, setMedications] = useState([]);
@@ -76,16 +76,16 @@ const MedicationsScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={ScreenStyles.container}>
       <Header
         title="Medicación"
         onClose={() => navigation.goBack()}
         bgColor="#F7931E"
       />
       {loading ? (
-        <Text style={styles.loading}>Cargando medicación...</Text>
+        <Text style={ScreenStyles.loading}>Cargando medicación...</Text>
       ) : medications.length === 0 ? (
-        <Text style={styles.noMedications}>
+        <Text style={ScreenStyles.noItems}>
           No hay medicamentos registrados.
         </Text>
       ) : (
@@ -95,14 +95,14 @@ const MedicationsScreen = ({ navigation }) => {
           renderItem={({ item }) => (
             <Medication item={item} handlePress={openModal} />
           )}
-          style={styles.list}
+          style={ScreenStyles.list}
         />
       )}
       <TouchableOpacity
-        style={styles.addButton}
+        style={ScreenStyles.addButton}
         onPress={() => navigation.navigate("MedicationsForm")}
       >
-        <Text style={styles.addButtonText}>+</Text>
+        <Text style={ScreenStyles.addButtonText}>+</Text>
       </TouchableOpacity>
 
       {selectedMedication && (
@@ -140,43 +140,5 @@ const MedicationsScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-  },
-  list: {
-    padding: 16,
-  },
-  loading: {
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 20,
-  },
-  noMedications: {
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 20,
-  },
-  addButton: {
-    alignSelf: "center",
-    backgroundColor: "#fff",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#ff7f00",
-    elevation: 8,
-    marginBottom: 16,
-  },
-  addButtonText: {
-    color: "#ff7f00",
-    fontSize: 36,
-    fontWeight: "bold",
-  },
-});
 
 export default MedicationsScreen;

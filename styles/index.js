@@ -1,0 +1,6 @@
+export { default as ModalStyles } from './ModalStyles'
+export { default as ItemStyles } from './ItemStyles'
+export { default as FormStyles } from './FormStyles'
+export { default as ScreenStyles } from './ScreenStyles'
+export { default as AuthStyles } from './AuthStyles'
+export { default as ComponentsStyle } from './components/ComponentsTyles'

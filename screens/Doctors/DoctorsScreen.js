@@ -4,11 +4,10 @@ import {
   Text,
   FlatList,
   TouchableOpacity,
-  StyleSheet,
   Modal,
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
-import { getDoctors, deleteDoctor } from "../../services/api";
+import { getDoctors, deleteDoctor } from "../../services";
 import {
   Header,
   Doctor,
@@ -16,6 +15,7 @@ import {
   ModalShow,
   Filter,
 } from "../../components";
+import { ScreenStyles } from "../../styles";
 
 const DoctorsScreen = ({ navigation }) => {
   const [doctors, setDoctors] = useState([]);
@@ -100,16 +100,14 @@ const DoctorsScreen = ({ navigation }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={ScreenStyles.container}>
       <Header title="Médicos" onClose={() => navigation.goBack()} />
       <Filter handleSearch={handleSearch} text={searchText} />
       {loading ? (
-        <Text style={styles.loading}>Cargando médicos...</Text>
+        <Text style={ScreenStyles.loading}>Cargando médicos...</Text>
       ) : filteredDoctors.length === 0 ? (
-        <Text style={styles.noDoctors}>
-          {searchText
-            ? "No se encontraron médicos."
-            : "No hay médicos registrados."}
+        <Text style={ScreenStyles.noItems}>
+          {searchText ? "No se encontraron médicos." : "No hay médicos registrados."}
         </Text>
       ) : (
         <FlatList
@@ -118,14 +116,14 @@ const DoctorsScreen = ({ navigation }) => {
           renderItem={({ item }) => (
             <Doctor item={item} handlePress={openModal} />
           )}
-          style={styles.list}
+          style={ScreenStyles.list}
         />
       )}
       <TouchableOpacity
-        style={styles.addButton}
+        style={ScreenStyles.addButton}
         onPress={() => navigation.navigate("DoctorsForm")}
       >
-        <Text style={styles.addButtonText}>+</Text>
+        <Text style={ScreenStyles.addButtonText}>+</Text>
       </TouchableOpacity>
 
       {selectedDoctor && (
@@ -165,47 +163,5 @@ const DoctorsScreen = ({ navigation }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f0f0f0",
-  },
-  filterButtonText: {
-    marginLeft: 8,
-    color: "#ff7f00",
-    fontSize: 16,
-  },
-  list: {
-    padding: 16,
-  },
-  loading: {
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 20,
-  },
-  noDoctors: {
-    fontSize: 18,
-    textAlign: "center",
-    marginTop: 20,
-  },
-  addButton: {
-    alignSelf: "center",
-    backgroundColor: "#fff",
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    justifyContent: "center",
-    alignItems: "center",
-    borderWidth: 2,
-    borderColor: "#ff7f00",
-    elevation: 8,
-  },
-  addButtonText: {
-    color: "#ff7f00",
-    fontSize: 36,
-    fontWeight: "bold",
-  },
-});
 
 export default DoctorsScreen;

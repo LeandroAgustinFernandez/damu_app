@@ -4,10 +4,10 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  StyleSheet,
   Alert,
 } from 'react-native';
 import { useSignUp } from '@clerk/clerk-expo';
+import { AuthStyles } from '../../styles';
 
 export default function SignUpScreen({ navigation }) {
   const { signUp, isLoaded } = useSignUp();
@@ -66,13 +66,13 @@ export default function SignUpScreen({ navigation }) {
 
   return (
     <View>
-      <View style={styles.header}>
-        <Text style={styles.logo}>DAMU</Text>
-        <Text style={styles.subtitle}>Registro</Text>
+      <View style={AuthStyles.header}>
+        <Text style={AuthStyles.logoSignUp}>DAMU</Text>
+        <Text style={AuthStyles.subtitle}>Registro</Text>
       </View>
-      <View style={styles.container}>
+      <View style={AuthStyles.containerSignUp}>
         <TextInput
-          style={styles.input}
+          style={AuthStyles.inputSignUp}
           placeholder="Nombre"
           placeholderTextColor="#777"
           keyboardType="email-address"
@@ -81,7 +81,7 @@ export default function SignUpScreen({ navigation }) {
           onChangeText={setName}
         />
         <TextInput
-          style={styles.input}
+          style={AuthStyles.inputSignUp}
           placeholder="Email"
           placeholderTextColor="#777"
           keyboardType="email-address"
@@ -90,7 +90,7 @@ export default function SignUpScreen({ navigation }) {
           onChangeText={setEmail}
         />
         <TextInput
-          style={styles.input}
+          style={AuthStyles.inputSignUp}
           placeholder="Contraseña"
           placeholderTextColor="#777"
           secureTextEntry
@@ -98,7 +98,7 @@ export default function SignUpScreen({ navigation }) {
           onChangeText={setPassword}
         />
         <TextInput
-          style={styles.input}
+          style={AuthStyles.inputSignUp}
           placeholder="Repetir contraseña"
           placeholderTextColor="#777"
           secureTextEntry
@@ -106,82 +106,17 @@ export default function SignUpScreen({ navigation }) {
           onChangeText={setConfirmPassword}
         />
 
-        <TouchableOpacity style={styles.button} onPress={handleSignUp}>
-          <Text style={styles.buttonText}>Registrarse</Text>
+        <TouchableOpacity style={AuthStyles.buttonSignUp} onPress={handleSignUp}>
+          <Text style={AuthStyles.buttonText}>Registrarse</Text>
         </TouchableOpacity>
 
         <TouchableOpacity onPress={() => navigation.navigate('SignIn')}>
-          <Text style={styles.footerText}>
+          <Text style={AuthStyles.footerText}>
             Ya es miembro?{' '}
-            <Text style={styles.loginText}>Iniciar sesión</Text>
+            <Text style={AuthStyles.loginText}>Iniciar sesión</Text>
           </Text>
         </TouchableOpacity>
       </View>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  header: {
-    backgroundColor: '#F57C00',
-    height: 200,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderBottomLeftRadius: 50,
-    borderBottomRightRadius: 50,
-    marginBottom: 20,
-  },
-  logo: {
-    fontSize: 36,
-    color: '#4A369D',
-    fontWeight: 'bold',
-  },
-  container: {
-    paddingHorizontal: 30,
-    backgroundColor: '#f2f2f2', // Color de fondo claro
-  },
-  title: {
-    fontSize: 28, // Aumentado ligeramente
-    fontWeight: 'bold',
-    marginBottom: 30,
-    textAlign: 'center',
-  },
-  input: {
-    height: 50,
-    borderRadius: 15, // Esquinas redondeadas
-    backgroundColor: '#fff',
-    marginBottom: 20,
-    paddingHorizontal: 15,
-    fontSize: 18, // Tamaño del texto aumentado
-    shadowColor: '#000', // Sombra
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 5, // Para sombra en Android
-  },
-  button: {
-    backgroundColor: '#ff8000', // Naranja
-    paddingVertical: 15,
-    borderRadius: 10, // Menos redondeado
-    alignItems: 'center',
-    marginVertical: 15,
-    shadowColor: '#000', // Sombra en botón
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 20, // Texto del botón más grande
-    fontWeight: 'bold',
-  },
-  loginText: {
-    color: '#5a3d8a',
-    fontWeight: 'bold', // "Iniciar sesión" en negrita
-  },
-  footerText: {
-    textAlign: 'center',
-    fontSize: 16,
-  }
-});

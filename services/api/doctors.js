@@ -7,6 +7,7 @@ export const getDoctors = async (userId) => {
       FROM doctors d
       JOIN medical_specialities s ON d.speciality_id = s.id
       WHERE d.user_id = ${userId}
+      ORDER BY d.id ASC;
     `;
     return response;
   } catch (error) {
@@ -24,13 +25,13 @@ export const saveDoctor = async (data) => {
     return result;
   } catch (error) {
     console.error("Error saving doctor:", error);
-    throw error;
+    return false
   }
 }
 
 export const updateDoctor = async (doctorId, updatedData) => {
   try {
-    await sql`
+    const result = await sql`
       UPDATE doctors
       SET 
         name = ${updatedData.name},
@@ -42,10 +43,11 @@ export const updateDoctor = async (doctorId, updatedData) => {
         schedule = ${updatedData.schedule}
       WHERE id = ${doctorId}
     `;
-    return true;
+    return result;
   } catch (error) {
     console.error("Error updating doctor:", error);
-    throw error;
+    return false
+    // throw error;
   }
 };
 

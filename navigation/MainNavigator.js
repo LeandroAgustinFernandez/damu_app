@@ -1,5 +1,5 @@
-import { AppStack } from './AppNavigator';
-import { AuthStack } from './AuthNavigator';
+import { AppNavigator } from './AppNavigator';
+import { AuthNavigator } from './AuthNavigator';
 import { useContext } from 'react';
 import { UserContext } from '../context/UserContext';
 
@@ -7,5 +7,5 @@ import { UserContext } from '../context/UserContext';
 export default MainNavigator = () => {
     const { user } = useContext(UserContext)
     // console.log('User in MainNavigator:', user);
-    return user ? <AppStack /> : <AuthStack />;
+    return user ? <AppNavigator /> : <AuthNavigator />;
 };

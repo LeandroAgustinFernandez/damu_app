@@ -26,14 +26,18 @@ DAMU/
 │   ├── Studies/              # Componente para la seccion de estudios
 │   │   ├── StudyItem.js      # Componente estudio item
 │   ├── DownloadLink.js       # Componente para descarga de archivo
+│   ├── Filter.js             # Componente de filtro
 │   ├── Header.js             # Componente para el header de las secciones
 │   ├── HomeCard.js           # Componente Card de las secciones de la Home
 │   ├── index.js              # Archivo configuración exports
+│   ├── ModalAlert.js         # Componente Modal para alertar en caso de suceso o error
 │   ├── ModalDelete.js        # Componente Modal para borrar items
 │   ├── ModalShow.js          # Componente Modal para mostrar items
 ├── constants/                # Configuración de constantes
 │   ├── days.js               # Días
 │   ├── menu.js               # Módulos
+├── context/                  # Contexto de la aplicación
+│   ├── UserContext.js        # Contexto del usuario
 ├── navigation/               # Configuración de navegación
 │   ├── AppNavigator.js       # Navegación de las secciones
 │   ├── AuthNavigator.js      # Navegación de autenticación
@@ -43,16 +47,16 @@ DAMU/
 │   │   ├── SignInScreen.js   # Pantalla de login de usuario
 │   │   ├── SignUpScreen.js   # Pantalla de registro de usuario
 │   │   ├── VerificationScreen.js   # Pantalla de verificación de usuario
-│   ├── Medicos/              # Funcionalidades relacionadas con médicos
+│   ├── Doctors/              # Funcionalidades relacionadas con médicos
 │   │   ├── DoctorsScreen.js  # Lista de médicos
 │   │   ├── DoctorsForm.js    # Formulario para crear/editar médicos
-│   ├── Estudios/             # Funcionalidades relacionadas con estudios
+│   ├── Studios/             # Funcionalidades relacionadas con estudios
 │   │   ├── StudiesScreen.js  # Lista de estudios
 │   │   ├── StudiesForm.js    # Formulario para crear/editar estudios
-│   ├── Medicamentos/         # Funcionalidades relacionadas con medicamentos
+│   ├── Medications/         # Funcionalidades relacionadas con medicamentos
 │   │   ├── MedicationsScreen.js    # Lista de medicamentos
 │   │   ├── MedicationsForm.js      # Formulario para crear/editar medicamentos
-│   ├── Alarmas/              # Funcionalidades de alarmas
+│   ├── Alarms/              # Funcionalidades de alarmas
 │   │   ├── AlarmsScreen.js   # Lista de alarmas
 │   │   ├── AlarmsForm.js     # Formulario para crear/editar alarmas
 ├── services/                 # Servicios para conexión externa
@@ -65,8 +69,9 @@ DAMU/
 │   │   ├── studies.js        # Consultas a la base de datos - studies
 │   │   ├── users.js          # Consultas a la base de datos - user
 │   │   ├── alarms.js         # Consultas a la base de datos - alarms
-│   │   ├── index.js          # Archivo configuración exports
-│   ├── firebaseConfig.js     # Configuración de Firebase
+│   ├── cloudinary/           # Configuración servicio Cloudinary (subir archivos)
+│   │   ├── cloudinary.js     # servicio Cloudinary
+│   │   index.js              # Archivo configuración exports
 │   ├── notificationService.js      # Configuración de notificaciones
 ├── styles/                   # Estilos compartidos
 │   ├── colors.js             # Paleta de colores
