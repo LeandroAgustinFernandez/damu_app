@@ -143,10 +143,10 @@ const styles = StyleSheet.create({
   },
   error: {
     color: "red",
-    paddingBottom: "15px",
-    paddingHorizontal: "10px",
+    paddingBottom: 15,
+    paddingHorizontal: 10,
     fontWeight: "bold",
-    fontSize: "15px"
+    fontSize: 15
   },
   dayRow: {
     flexDirection: "row",

@@ -131,7 +131,7 @@ const DoctorsForm = ({ navigation, route }) => {
             >
               <Picker.Item label="Seleccionar especialidad*" value="" />
               {specialities.map((spec) => (
-                <Picker.Item key={spec.id} label={spec.name} value={spec.id} />
+                <Picker.Item key={spec.id} label={spec.name} value={spec.id.toString()} />
               ))}
             </Picker>
           ) : (
@@ -144,7 +144,7 @@ const DoctorsForm = ({ navigation, route }) => {
             >
               <Picker.Item label="Seleccionar especialidad*" value="" />
               {specialities.map((spec) => (
-                <Picker.Item key={spec.id} label={spec.name} value={spec.id} />
+                <Picker.Item key={spec.id} label={spec.name} value={spec.id.toString()} />
               ))}
             </Picker>
           )}
