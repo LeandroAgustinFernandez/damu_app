@@ -6,20 +6,21 @@ import {
   TouchableOpacity,
   ScrollView,
   SafeAreaView,
-  StyleSheet,
   Switch,
 } from "react-native";
 import { UserContext } from "../../context/UserContext";
 import { saveAlarm, updateAlarm } from "../../services";
 import { ModalAlert } from "../../components";
 import Header from "../../components/Header";
+import { FormStyles } from "../../styles";
+import { validateField } from "../../utils/validations"
 import * as Notifications from "expo-notifications";
 import {
   getScheduledNotifications,
   registerForPushNotificationsAsync,
 } from "../../services/notifications";
 
-const DAYS = ["Lu", "Ma", "Mi", "Jue", "Vie", "Sab", "Dom"];
+const DAYS = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 
 const AlarmsForm = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
@@ -34,6 +35,7 @@ const AlarmsForm = ({ navigation, route }) => {
   });
   const [modalVisible, setModalVisible] = useState(false);
   const [modalProps, setModalProps] = useState({});
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     if (alarmToEdit) {
@@ -62,12 +64,12 @@ const AlarmsForm = ({ navigation, route }) => {
       const selectedDays = [];
       scheduleArray.forEach((entry) => {
         const [dayLabel, time] = entry.split(" ");
-        let selectedDay = ""
+        let selectedDay = "";
         for (day of DAYS) {
           if (getDayLabel(day) === dayLabel) {
-            selectedDay = day
-            break
-          };
+            selectedDay = day;
+            break;
+          }
         }
         if (day) {
           schedule[day] = time;
@@ -79,6 +81,8 @@ const AlarmsForm = ({ navigation, route }) => {
   };
 
   const handleInputChange = (field, value) => {
+    const error = validateField(field, value);
+    setErrors({ ...errors, [field]: error });
     setFormData({ ...formData, [field]: value });
   };
 
@@ -125,13 +129,13 @@ const AlarmsForm = ({ navigation, route }) => {
 
   const getDayLabel = (day) => {
     const dayLabels = {
-      Lu: "Lunes",
-      Ma: "Martes",
-      Mi: "Miércoles",
-      Jue: "Jueves",
-      Vie: "Viernes",
-      Sab: "Sábado",
-      Dom: "Domingo",
+      Lunes: "Lunes",
+      Martes: "Martes",
+      Miercoles: "Miércoles",
+      Jueves: "Jueves",
+      Viernes: "Viernes",
+      Sabado: "Sábado",
+      Domingo: "Domingo",
     };
     return dayLabels[day] || day;
   };
@@ -140,13 +144,20 @@ const AlarmsForm = ({ navigation, route }) => {
     const { medication, dose, dose_type, schedule, selectedDays, allDays } =
       formData;
 
-    if (
-      !medication ||
-      !dose ||
-      !dose_type ||
-      (selectedDays.length === 0 && !allDays)
-    ) {
+    if (!medication || !dose || !dose_type || (selectedDays.length === 0 && !allDays)) {
       alert("Por favor completa todos los campos obligatorios.");
+      return;
+    }
+
+    for (const day of selectedDays) {
+      if (!schedule[day] || schedule[day].trim() === "") {
+        alert(`Por favor asigna un horario para ${day}.`);
+        return;
+      }
+    }
+
+    if (allDays && (!schedule.allDays || schedule.allDays.trim() === "")) {
+      alert("Por favor asigna un horario para 'Todos los días'.");
       return;
     }
 
@@ -162,13 +173,13 @@ const AlarmsForm = ({ navigation, route }) => {
       };
 
       console.log(formData);
-      
+
       if (alarmToEdit) {
         response = await updateAlarm(alarmToEdit.id, alarmData);
       } else {
         response = await saveAlarm(alarmData);
       }
-      
+
       setModalProps({
         iconStatus: "check-circle",
         iconStatusColor: "#4CAF50",
@@ -194,45 +205,51 @@ const AlarmsForm = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <SafeAreaView style={FormStyles.container}>
       <Header
         title={alarmToEdit ? "Editar alarma" : "Nueva alarma"}
         onClose={() => navigation.goBack()}
       />
-      <ScrollView contentContainerStyle={styles.form}>
-        <Text style={styles.sectionTitle}>Detalle de la alarma:</Text>
+      <ScrollView contentContainerStyle={FormStyles.form}>
+        <Text style={FormStyles.sectionTitle}>Detalle de la alarma:</Text>
 
         <TextInput
-          style={styles.input}
+          style={FormStyles.input}
           placeholder="Nombre de la medicación*"
           value={formData.medication}
           onChangeText={(value) => handleInputChange("medication", value)}
         />
-
+        {errors["medication"] && (
+          <Text style={FormStyles.error}>{errors["medication"]}</Text>
+        )}
         <TextInput
-          style={styles.input}
+          style={FormStyles.input}
           placeholder="Cantidad de la dosis*"
           value={formData.dose}
           onChangeText={(value) => handleInputChange("dose", value)}
         />
-
+        {errors["dose"] && (
+          <Text style={FormStyles.error}>{errors["dose"]}</Text>
+        )}
         <TextInput
-          style={styles.input}
+          style={FormStyles.input}
           placeholder="Tipo de dosis*"
           value={formData.dose_type}
           onChangeText={(value) => handleInputChange("dose_type", value)}
         />
-
-        <Text style={styles.sectionTitle}>Frecuencia:</Text>
+        {errors["dose_type"] && (
+          <Text style={FormStyles.error}>{errors["dose_type"]}</Text>
+        )}
+        <Text style={FormStyles.sectionTitle}>Frecuencia:</Text>
         {DAYS.map((day) => (
-          <View key={day} style={styles.dayRow}>
+          <View key={day} style={FormStyles.dayRow}>
             <Switch
               value={formData.selectedDays.includes(day)}
               onValueChange={() => toggleDaySelection(day)}
             />
-            <Text style={styles.dayLabel}>{day}</Text>
+            <Text style={FormStyles.dayLabel}>{day}</Text>
             <TextInput
-              style={styles.timeInput}
+              style={FormStyles.timeInput}
               placeholder="Horario"
               value={formData.schedule[day] || ""}
               editable={formData.selectedDays.includes(day)}
@@ -241,7 +258,7 @@ const AlarmsForm = ({ navigation, route }) => {
           </View>
         ))}
 
-        <View style={styles.dayRow}>
+        <View style={FormStyles.dayRow}>
           <Switch
             value={formData.allDays}
             onValueChange={(value) =>
@@ -254,9 +271,9 @@ const AlarmsForm = ({ navigation, route }) => {
               }))
             }
           />
-          <Text style={styles.dayLabel}>Todos los días</Text>
+          <Text style={FormStyles.dayLabel}>Todos los días</Text>
           <TextInput
-            style={styles.timeInput}
+            style={FormStyles.timeInput}
             placeholder="Horario"
             value={formData.schedule.allDays || ""}
             editable={formData.allDays}
@@ -269,8 +286,8 @@ const AlarmsForm = ({ navigation, route }) => {
           />
         </View>
 
-        <TouchableOpacity style={styles.saveButton} onPress={handleSaveAlarm}>
-          <Text style={styles.saveButtonText}>Guardar</Text>
+        <TouchableOpacity style={FormStyles.saveButton} onPress={handleSaveAlarm}>
+          <Text style={FormStyles.saveButtonText}>Guardar</Text>
         </TouchableOpacity>
 
         <ModalAlert
@@ -282,57 +299,5 @@ const AlarmsForm = ({ navigation, route }) => {
     </SafeAreaView>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f4f4f4",
-  },
-  form: {
-    padding: 20,
-  },
-  sectionTitle: {
-    fontSize: 18,
-    fontWeight: "bold",
-    marginBottom: 10,
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 10,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: "#ccc",
-  },
-  dayRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  dayLabel: {
-    flex: 1,
-    fontSize: 16,
-  },
-  timeInput: {
-    flex: 2,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 10,
-    borderWidth: 1,
-    borderColor: "#ccc",
-  },
-  saveButton: {
-    backgroundColor: "#FFA500",
-    padding: 15,
-    borderRadius: 8,
-    alignItems: "center",
-    marginTop: 20,
-  },
-  saveButtonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-});
 
 export default AlarmsForm;

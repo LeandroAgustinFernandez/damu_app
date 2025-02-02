@@ -14,6 +14,7 @@ import * as DocumentPicker from "expo-document-picker";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { ModalAlert } from "../../components";
 import { FormStyles } from "../../styles";
+import { validateField } from "../../utils/validations"
 
 const StudiesForm = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
@@ -32,6 +33,8 @@ const StudiesForm = ({ navigation, route }) => {
       : "",
   });
 
+  const [errors, setErrors] = useState({});
+
   const onChangeDate = (event, selectedDate) => {
     const currentDate = selectedDate || formData.date;
     setShowDatePicker(false);
@@ -39,6 +42,8 @@ const StudiesForm = ({ navigation, route }) => {
   };
 
   const handleInputChange = (field, value) => {
+    const error = validateField(field, value);
+    setErrors({ ...errors, [field]: error });
     setFormData({ ...formData, [field]: value });
   };
 
@@ -86,28 +91,28 @@ const StudiesForm = ({ navigation, route }) => {
         await saveStudy(studyData);
       }
       setModalProps({
-        iconName: "assignment", 
+        iconName: "assignment",
         iconStatus: "check-circle",
         iconStatusColor: "#4CAF50",
         message: "El estudio se guardó correctamente!",
         onClose: () => {
           setModalVisible(false);
           navigation.goBack();
-        }
+        },
       });
       setModalVisible(true);
     } catch (error) {
       console.error("Error saving study:", error);
       setModalProps({
-        iconName: "assignment", 
+        iconName: "assignment",
         iconStatus: "close-circle",
         iconStatusColor: "#ff0000",
         message: "Hubo un error al tratar de guardar el registro.",
         onClose: () => {
           setModalVisible(false);
           navigation.goBack();
-        }
-      });      
+        },
+      });
       setModalVisible(true);
     }
   };
@@ -158,24 +163,39 @@ const StudiesForm = ({ navigation, route }) => {
           value={formData.name}
           onChangeText={(value) => handleInputChange("name", value)}
         />
+        {errors["name"] && (
+          <Text style={FormStyles.error}>{errors["name"]}</Text>
+        )}
         <TextInput
           style={FormStyles.input}
           placeholder="Indicado por"
           value={formData.doctor_name}
           onChangeText={(value) => handleInputChange("doctor_name", value)}
         />
-        <TouchableOpacity style={FormStyles.fileButton} onPress={handleFilePicker}>
+        {errors["doctor_name"] && (
+          <Text style={FormStyles.error}>{errors["doctor_name"]}</Text>
+        )}
+        <TouchableOpacity
+          style={FormStyles.fileButton}
+          onPress={handleFilePicker}
+        >
           <Text style={FormStyles.fileButtonText}>
             {formData.file ? formData.file.name : "Seleccionar archivo"}
           </Text>
         </TouchableOpacity>
+        {errors["file"] && (
+          <Text style={FormStyles.error}>{errors["file"]}</Text>
+        )}
         <TextInput
           style={FormStyles.input}
           placeholder="Otros datos"
           value={formData.additional_info}
           onChangeText={(value) => handleInputChange("additional_info", value)}
         />
-        <TouchableOpacity style={FormStyles.saveButton} onPress={handleSaveStudy}>
+        <TouchableOpacity
+          style={FormStyles.saveButton}
+          onPress={handleSaveStudy}
+        >
           <Text style={FormStyles.saveButtonText}>Guardar</Text>
         </TouchableOpacity>
         <ModalAlert

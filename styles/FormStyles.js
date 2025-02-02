@@ -119,7 +119,6 @@ const styles = StyleSheet.create({
     color: "#fff",
     fontSize: 16,
   },
-  // Filter
   filterContainer: {
     flexDirection: "column",
     paddingHorizontal: 16,
@@ -141,7 +140,31 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
     shadowRadius: 5,
-  }
+  },
+  error: {
+    color: "red",
+    paddingBottom: "15px",
+    paddingHorizontal: "10px",
+    fontWeight: "bold",
+    fontSize: "15px"
+  },
+  dayRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginBottom: 10,
+  },
+  dayLabel: {
+    flex: 1,
+    fontSize: 16,
+  },
+  timeInput: {
+    flex: 2,
+    backgroundColor: "#fff",
+    borderRadius: 8,
+    padding: 10,
+    borderWidth: 1,
+    borderColor: "#ccc",
+  }  
 });
 
 export default styles;

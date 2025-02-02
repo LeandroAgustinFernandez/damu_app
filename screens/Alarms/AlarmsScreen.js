@@ -13,7 +13,6 @@ import {
   Alarm,
   ModalDelete,
   ModalShow,
-  Filter,
 } from "../../components";
 import { ScreenStyles } from "../../styles";
 
@@ -98,7 +97,6 @@ const AlarmsScreen = ({ navigation }) => {
   return (
     <SafeAreaView style={ScreenStyles.container}>
       <Header title="Alarmas" onClose={() => navigation.goBack()} />
-      <Filter handleSearch={handleSearch} text={searchText} />
       {loading ? (
         <Text style={ScreenStyles.loading}>Cargando alarmas...</Text>
       ) : filteredAlarms.length === 0 ? (

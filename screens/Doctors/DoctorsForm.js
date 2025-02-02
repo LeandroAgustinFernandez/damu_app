@@ -16,6 +16,7 @@ import Header from "../../components/Header";
 import { daysOfWeek } from "../../constants/days";
 import { ModalAlert } from "../../components";
 import { FormStyles } from "../../styles";
+import { validateField } from "../../utils/validations";
 
 const DoctorsForm = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
@@ -30,6 +31,7 @@ const DoctorsForm = ({ navigation, route }) => {
     schedule: doctor?.schedule || "",
     additional_info: doctor?.additionale_info || "",
   });
+  const [errors, setErrors] = useState({});
   const [specialities, setSpecialities] = useState([]);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalProps, setModalProps] = useState({});
@@ -47,13 +49,15 @@ const DoctorsForm = ({ navigation, route }) => {
   }, []);
 
   const handleInputChange = (field, value) => {
+    const error = validateField(field, value);
+    setErrors({ ...errors, [field]: error });
     setFormData({ ...formData, [field]: value });
   };
 
   const handleSaveDoctor = async () => {
     const { name, speciality_id, attention_days, schedule } = formData;
     if (!name || !speciality_id || attention_days.length === 0 || !schedule) {
-      alert("Por favor completa todos los campos obligatorios.");
+      alert("Por favor complete los campos obligatorios.");
       return;
     }
 
@@ -104,12 +108,18 @@ const DoctorsForm = ({ navigation, route }) => {
           value={formData.name}
           onChangeText={(value) => handleInputChange("name", value)}
         />
+        {errors["name"] && (
+          <Text style={FormStyles.error}>{errors["name"]}</Text>
+        )}
         <TextInput
           style={FormStyles.input}
           placeholder="Apellido"
           value={formData.surname}
           onChangeText={(value) => handleInputChange("surname", value)}
         />
+        {errors["surname"] && (
+          <Text style={FormStyles.error}>{errors["surname"]}</Text>
+        )}
         <View style={FormStyles.inputContainer}>
           {Platform.OS === "ios" ? (
             <Picker
@@ -130,7 +140,7 @@ const DoctorsForm = ({ navigation, route }) => {
               onValueChange={(value) =>
                 handleInputChange("speciality_id", value)
               }
-              style={[FormStyles.multiSelect,{ height: 50 }]}
+              style={[FormStyles.multiSelect, { height: 50 }]}
             >
               <Picker.Item label="Seleccionar especialidad*" value="" />
               {specialities.map((spec) => (
@@ -139,14 +149,18 @@ const DoctorsForm = ({ navigation, route }) => {
             </Picker>
           )}
         </View>
-
+        {errors["speciality_id"] && (
+          <Text style={FormStyles.error}>{errors["speciality_id"]}</Text>
+        )}
         <TextInput
           style={FormStyles.input}
           placeholder="Dirección"
           value={formData.address}
           onChangeText={(value) => handleInputChange("address", value)}
         />
-
+        {errors["address"] && (
+          <Text style={FormStyles.error}>{errors["address"]}</Text>
+        )}
         <View style={FormStyles.inputContainer}>
           <MultiSelect
             data={daysOfWeek}
@@ -159,30 +173,41 @@ const DoctorsForm = ({ navigation, route }) => {
             selectedStyle={FormStyles.selectedStyle}
             renderItem={(item) => {
               const isSelected = formData.attention_days.includes(item.value);
-              let bgColor = isSelected ? "#e0e0e0" : "white"
+              let bgColor = isSelected ? "#e0e0e0" : "white";
               return (
-                <View style={[{backgroundColor: bgColor}, FormStyles.selectedItemStyle]}>
+                <View
+                  style={[
+                    { backgroundColor: bgColor },
+                    FormStyles.selectedItemStyle,
+                  ]}
+                >
                   <Text>{item.label}</Text>
                 </View>
               );
             }}
           />
         </View>
-
+        {errors["attention_days"] && (
+          <Text style={FormStyles.error}>{errors["attention_days"]}</Text>
+        )}
         <TextInput
           style={FormStyles.input}
           placeholder="Horario de atención (HH:MM - HH:MM)*"
           value={formData.schedule}
           onChangeText={(value) => handleInputChange("schedule", value)}
         />
-
+        {errors["schedule"] && (
+          <Text style={FormStyles.error}>{errors["schedule"]}</Text>
+        )}
         <TextInput
           style={FormStyles.input}
           placeholder="Teléfono"
           value={formData.phone}
           onChangeText={(value) => handleInputChange("phone", value)}
         />
-
+        {errors["phone"] && (
+          <Text style={FormStyles.error}>{errors["phone"]}</Text>
+        )}
         <TextInput
           style={[FormStyles.input, FormStyles.textArea]}
           placeholder="Información adicional"
@@ -190,8 +215,13 @@ const DoctorsForm = ({ navigation, route }) => {
           onChangeText={(value) => handleInputChange("additional_info", value)}
           multiline
         />
-
-        <TouchableOpacity style={FormStyles.saveButton} onPress={handleSaveDoctor}>
+        {errors["additional_info"] && (
+          <Text style={FormStyles.error}>{errors["key"]}</Text>
+        )}
+        <TouchableOpacity
+          style={FormStyles.saveButton}
+          onPress={handleSaveDoctor}
+        >
           <Text style={FormStyles.saveButtonText}>Guardar</Text>
         </TouchableOpacity>
         <ModalAlert

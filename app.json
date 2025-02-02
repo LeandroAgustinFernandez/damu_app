@@ -8,19 +8,11 @@
     "userInterfaceStyle": "light",
     "newArchEnabled": true,
     "extra": {
-      "EXPO_PUBLIC_CLERK_API_KEY":"pk_test_cGlja2VkLWNoaWNrZW4tNDIuY2xlcmsuYWNjb3VudHMuZGV2JA",
-      "DATABASE_URL":"postgresql://damudb_owner:oUFCipfksz34@ep-proud-rice-a5z8wih2.us-east-2.aws.neon.tech/damudb?sslmode=require",
-      "EXPO_PUBLIC_SERVER_URL":"https://damu.com/",
-      "FIREBASE_API_KEY":"AIzaSyB3m6bolROTGs3qTrRatDjrNJJliLzdrWc",
-      "FIREBASE_AUTHDOMAIN":"damu-19df8.firebaseapp.com",
-      "FIREBASE_PROYECTID":"damu-19df8",
-      "FIREBASE_STORAGEBUCKET":"damu-19df8.firebasestorage.app",
-      "FIREBASE_MESSAGINGSENDERID":"922420367997",
-      "FIREBASE_APPID":"1:922420367997:web:764593d5d2141a97e81714",
-      "GCLOUD_PROJECT_ID": "credible-rex-443511-q7",
-      "GCLOUD_CLIENT_EMAIL": "damu-service@credible-rex-443511-q7.iam.gserviceaccount.com",
-      "GCLOUD_PRIVATE_KEY": "a7c28ec712118c907b420b1b4ec61de2fed42bd3",
-      "GCLOUD_BUCKET_NAME": "damu-bucket"
+      "EXPO_PUBLIC_CLERK_API_KEY": "pk_test_cGlja2VkLWNoaWNrZW4tNDIuY2xlcmsuYWNjb3VudHMuZGV2JA",
+      "DATABASE_URL": "postgresql://damudb_owner:oUFCipfksz34@ep-proud-rice-a5z8wih2.us-east-2.aws.neon.tech/damudb?sslmode=require",
+      "eas": {
+        "projectId": "1c868987-6758-45e4-9646-da9904d4cfda"
+      }
     },
     "splash": {
       "image": "./assets/splash-icon.png",
@@ -30,21 +22,27 @@
     "ios": {
       "supportsTablet": true,
       "infoPlist": {
-        "UIBackgroundModes": ["remote-notification"],
+        "UIBackgroundModes": [
+          "remote-notification"
+        ],
         "NSUserNotificationUsageDescription": "Esta aplicación usa notificaciones para mantenerlo informado."
-      }
+      },
+      "bundleIdentifier": "com.damu.app"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.leandro_fernandez1988.damu",
+      "useNextNotificationsApi": true
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      "expo-secure-store"
+      "expo-secure-store",
+      "expo-notifications"
     ]
   }
 }

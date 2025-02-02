@@ -12,12 +12,12 @@ import { useEffect } from "react";
 import { getScheduledNotifications, registerForPushNotificationsAsync } from "../services/notifications";
 import * as Notifications from 'expo-notifications';
 
-// Configuración del manejador de notificaciones
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
     shouldPlaySound: true,
-    shouldSetBadge: false, // Cambia a true si necesitas que se actualice el badge
+    shouldSetBadge: false,
   }),
 });
 
