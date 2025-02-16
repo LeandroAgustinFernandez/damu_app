@@ -19,8 +19,7 @@ export const getMedications = async (userId) => {
       const result = await sql`
       INSERT INTO medications (user_id, name, dose, dose_type, frequency, schedule)
       VALUES (${data.user_id}, ${data.name}, ${data.dosage}, ${data.type}, ${data.frequency}, ${data.schedule})
-    `;
-      console.log(result);
+    `;;
       return result;
     } catch (error) {
       console.error("Error fetching medications:", error);

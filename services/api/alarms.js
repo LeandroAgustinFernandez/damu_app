@@ -8,7 +8,6 @@ export const getAlarms = async (userId) => {
       WHERE a.user_id = ${userId}
       ORDER BY a.id ASC;
     `;
-    console.log(response)
     return response;
   } catch (error) {
     console.error("Error fetching alarms:", error);

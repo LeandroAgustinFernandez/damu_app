@@ -50,7 +50,6 @@ const StudiesForm = ({ navigation, route }) => {
   const handleFilePicker = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({ type: "*/*" });
-      console.log(result);
       if (!result.canceled) {
         let selectedFile = null;
         if (result.assets && result.assets.length > 0) {

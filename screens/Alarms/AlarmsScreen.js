@@ -51,18 +51,6 @@ const AlarmsScreen = ({ navigation }) => {
     }
   };
 
-  const handleSearch = (text) => {
-    setSearchText(text);
-    if (text === "") {
-      setFilteredAlarms(alarms);
-    } else {
-      const filtered = alarms.filter((alarm) =>
-        alarm.title.toLowerCase().includes(text.toLowerCase())
-      );
-      setFilteredAlarms(filtered);
-    }
-  };
-
   const openModal = (alarm) => {
     setSelectedAlarm(alarm);
     setModalVisible(true);

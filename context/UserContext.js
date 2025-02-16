@@ -30,9 +30,7 @@ export const UserProvider = ({ children }) => {
     if (Platform.OS === 'web') {
       await AsyncStorage.removeItem(key);      
     } else {
-       console.log(`Entro ${Platform.OS}`);
       let response = await SecureStore.deleteItemAsync(key);
-      console.log(response);
     }
   };
 

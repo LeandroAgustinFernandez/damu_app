@@ -7,3 +7,5 @@ export const daysOfWeek = [
   { label: "Sábado", value: "Sábado" },
   { label: "Domingo", value: "Domingo" },
 ];
+
+export const DAYS = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];

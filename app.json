@@ -25,6 +25,7 @@
         "UIBackgroundModes": [
           "remote-notification"
         ],
+        "NSLocalNotificationUsageDescription": "Esta aplicación usa notificaciones locales para recordatorios programados.",
         "NSUserNotificationUsageDescription": "Esta aplicación usa notificaciones para mantenerlo informado."
       },
       "bundleIdentifier": "com.damu.app"

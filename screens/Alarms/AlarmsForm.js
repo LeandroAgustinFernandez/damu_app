@@ -14,13 +14,12 @@ import { ModalAlert } from "../../components";
 import Header from "../../components/Header";
 import { FormStyles } from "../../styles";
 import { validateField } from "../../utils/validations"
-import * as Notifications from "expo-notifications";
 import {
-  getScheduledNotifications,
-  registerForPushNotificationsAsync,
+  askForNotificationPermissions,
+  saveNotification
 } from "../../services/notifications";
+import { DAYS } from "../../constants/days";
 
-const DAYS = ["Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado", "Domingo"];
 
 const AlarmsForm = ({ navigation, route }) => {
   const { user } = useContext(UserContext);
@@ -172,13 +171,15 @@ const AlarmsForm = ({ navigation, route }) => {
         user_id: user.user_id,
       };
 
-      console.log(formData);
-
       if (alarmToEdit) {
         response = await updateAlarm(alarmToEdit.id, alarmData);
       } else {
         response = await saveAlarm(alarmData);
       }
+
+      await askForNotificationPermissions();
+
+      await saveNotification(medication, dose, dose_type, schedule, allDays)
 
       setModalProps({
         iconStatus: "check-circle",
